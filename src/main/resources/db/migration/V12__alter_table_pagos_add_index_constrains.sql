@@ -1,0 +1,9 @@
+--Constraints
+
+ALTER TABLE pagos ADD CONSTRAINT PK_pagos PRIMARY KEY NONCLUSTERED (pago_Id);
+ALTER TABLE pagos ADD CONSTRAINT DF_pagos_pago_ID DEFAULT NEWID() FOR pago_ID;
+ALTER TABLE pagos ADD CONSTRAINT CHK_pagos_metodo_pago  CHECK (metodo_Pago IN ('TARJETA', 'TRANSFERENCIA'));
+ALTER TABLE pagos ADD CONSTRAINT DF_pagos_fecha_pago DEFAULT GETDATE() FOR fecha_Pago;
+ALTER TABLE pagos ADD CONSTRAINT FK_Pagos_Pedidos FOREIGN KEY (pedido_Id) REFERENCES pedidos(pedido_Id);
+
+

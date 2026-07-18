@@ -1,0 +1,54 @@
+
+
+spring:
+  application:
+    name: proyecto-final-desarrollo-web2
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=Urban_Mornings;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: Estuden1!
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: validate
+    naming:
+      physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    # Al estar bien indentado, ya puedes usar estas variables automáticamente:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+# 'logging' va en la raíz principal (al mismo nivel que 'spring' y 'server')
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+
+# Si esta es una propiedad tuya personalizada, va en la raíz o dentro de spring según la programaras
+app:
+  jwt:
+    issuer: Urban_Mornings
+  security:
+    jwt-secret: ${JWT-SECRET:Urban_Mornings_Proyecto_Programacion_WEB2_UNIVERSIDAD_DOMINICO_AMERICANO}
+
+
+
+server:
+  port: 9090
+
+jwtKeys:
+  privateKeyPath: jwtKeys/private.key.pem
+  publicKeyPath: jwtKeys/public.key.pem
+
+
