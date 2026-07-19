@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/catalogo")
@@ -24,7 +24,7 @@ public class CatalogoController {
 
     @PostMapping("/registar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
+    public ResponseEntity<ResponseCatalogoDTO> registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
         Catalogo catalogo = catalogoService.registroCatalgo(catalogoDTO);
 
         return ResponseEntity.ok().body(catalogoMapperService.entityToDTO(catalogo));
