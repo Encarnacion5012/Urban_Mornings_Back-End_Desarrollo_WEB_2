@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -60,10 +61,10 @@ public class AuthenticationController {
 
 
     @PostMapping("/register/clientes")
-    public ResponseEntity<ResponseClienteDTO> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        Cliente cliente = clienteService.registroClientes(registroDto);
-        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getClienteId()).toUri();
-        return ResponseEntity.created(Uri).body(clienteMapperService.entityToResponseDto(cliente));
+    public ResponseEntity registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        UUID cliente_id = clienteService.registroClientes(registroDto);
+        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente_id).toUri();
+        return ResponseEntity.created(Uri).build();
     }
 
     @PostMapping("/register/usuarios")

@@ -22,7 +22,7 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public Cliente registroClientes(RegistroClienteDTO registroDto){
+    public UUID registroClientes(RegistroClienteDTO registroDto){
 
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
@@ -33,7 +33,7 @@ public class ClienteServiceImpl implements IClientesService {
 
         cliente.setClienteId(generarClienteId());
 
-        return clienteRepository.registrarCLiente(
+        clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
                 cliente.getCedula(),
                 cliente.getNombre_Completo(),
@@ -44,6 +44,10 @@ public class ClienteServiceImpl implements IClientesService {
                 cliente.getImagen_url(),
                 cliente.getFecha_Registro()
                 );
+
+        return cliente.getClienteId();
+
+
     }
 
 
