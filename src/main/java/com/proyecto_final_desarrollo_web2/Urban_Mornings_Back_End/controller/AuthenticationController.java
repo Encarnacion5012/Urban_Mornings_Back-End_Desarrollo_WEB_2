@@ -63,18 +63,18 @@ public class AuthenticationController {
     @PostMapping("/register/clientes")
     public ResponseEntity registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
         UUID cliente_id = clienteService.registroClientes(registroDto);
-        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente_id).toUri();
-        return ResponseEntity.created(Uri).build();
+        URI uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente_id).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
     @PostMapping("/register/usuarios")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseUsuarioDto> registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        Usuario usuario = usuarioService.registroUsuario(registroDto);
+    public ResponseEntity registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        UUID usuario_id = usuarioService.registroUsuario(registroDto);
 
-        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getIdUsuario()).toUri();
+        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario_id).toUri();
 
-        return ResponseEntity.created(uri).body(usuarioMapperService.entityToResponseDto(usuario));
+        return ResponseEntity.created(uri).build();
 
     }
 

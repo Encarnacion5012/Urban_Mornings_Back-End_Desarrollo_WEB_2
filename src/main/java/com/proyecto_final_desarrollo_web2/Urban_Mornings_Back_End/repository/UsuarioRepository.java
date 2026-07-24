@@ -1,11 +1,14 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +21,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
 
     //Llamamos al storaged procedue con los parametros
+    @Modifying
     @Query(value = """
         EXEC usp_RegistroUsuario 
         :id_usuario,
@@ -30,7 +34,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
         :imagen_url,
         :activo
 """, nativeQuery = true)
-    Usuario registarUsuario(
+    void registarUsuario(
            @Param("id_usuario") UUID id_usuario,
            @Param("cedula") String cedula,
            @Param("nombre_Completo") String nombre_Completo,
@@ -41,4 +45,11 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
            @Param("imagen_url") String imagen_url,
            @Param("activo") boolean activo
     );
+
+
+    @Query(value = "EXEC usp_ListarUsuarios", nativeQuery = true)
+    List<Usuario>listarUsuarios();
 }
+
+
+

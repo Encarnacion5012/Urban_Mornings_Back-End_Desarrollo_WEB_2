@@ -20,12 +20,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Transactional
     @Override
-    public Usuario registroUsuario(RegistroUsuarioDTO dto) {
+    public UUID registroUsuario(RegistroUsuarioDTO dto) {
         Usuario usuario = usuarioMapperService.registroDtoToEntity(dto);
 
         usuario.setIdUsuario(generar_UUid_Usuario());
 
-       return usuarioRepository.registarUsuario(
+       usuarioRepository.registarUsuario(
                 usuario.getIdUsuario(),
                 usuario.getCedula(),
                 usuario.getNombre_Completo(),
@@ -36,6 +36,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 usuario.getImagen_url(),
                 usuario.isActivo()
         );
+       return usuario.getIdUsuario();
 
 
     }
