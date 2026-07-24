@@ -3,7 +3,12 @@ CREATE OR ALTER PROCEDURE  usp_ListarUsuarios
     BEGIN
     SET NOCOUNT ON
 
-        SELECT * FROM usuarios
+        SELECT usuarios.id_usuario,
+               usuarios.cedula,
+               usuarios.nombre_Completo,
+               usuarios.correo,
+               usuarios.telefono
+               FROM usuarios
         WHERE usuarios.activo = 1;
 
         END;

@@ -1,6 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -48,7 +49,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
 
     @Query(value = "EXEC usp_ListarUsuarios", nativeQuery = true)
-    List<Usuario>listarUsuarios();
+    List<ResponseUsuarioProjection>listarUsuarios();
 }
 
 
