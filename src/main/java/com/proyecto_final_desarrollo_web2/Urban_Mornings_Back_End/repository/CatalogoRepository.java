@@ -14,7 +14,7 @@ public interface CatalogoRepository extends JpaRepository<Catalogo, Integer> {
 
 
     @Query(value = "EXEC casp_RegistroCatalogo :nombre, :descripcion, :precio, :tipo, :categoria_Desayuno,:imagen_url,:activo", nativeQuery = true)
-    Catalogo registrarCatalogo(
+    ResponseCatalogoProjection registrarCatalogo(
             @Param("nombre") String nombre,
             @Param("descripcion") String descripcion,
             @Param("precio") BigDecimal precio,

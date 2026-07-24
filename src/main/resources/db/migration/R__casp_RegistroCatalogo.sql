@@ -17,7 +17,13 @@ INSERT INTO catalogo (nombre, descripcion, precio, tipo, categoria_Desayuno, ima
 VALUES ( @nombre, @descripcion, @precio, @tipo, @categoria_Desayuno, @imagen_url,@activo);
 
 
-SELECT * FROM catalogo
+SELECT catalogo.catalogo_id,
+       catalogo.descripcion,
+       catalogo.precio,
+       catalogo.tipo,
+       catalogo.categoria_Desayuno,
+       catalogo.imagen_Url
+FROM catalogo
 WHERE catalogo.catalogo_id = SCOPE_IDENTITY();
 
 END;

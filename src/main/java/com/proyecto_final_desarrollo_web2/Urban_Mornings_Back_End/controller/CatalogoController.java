@@ -23,10 +23,10 @@ public class CatalogoController {
 
     @PostMapping("/registar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
-        Catalogo catalogo = catalogoService.registroCatalgo(catalogoDTO);
+    public ResponseEntity<ResponseCatalogoProjection> registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
+        ResponseCatalogoProjection catalogo = catalogoService.registroCatalgo(catalogoDTO);
 
-        return ResponseEntity.ok().body(catalogoMapperService.entityToDTO(catalogo));
+        return ResponseEntity.ok().body(catalogo);
 
     }
 

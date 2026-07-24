@@ -19,7 +19,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
 
     @Transactional
     @Override
-    public Catalogo registroCatalgo(RegistroCatalogoDTO catalogoDTO) {
+    public ResponseCatalogoProjection registroCatalgo(RegistroCatalogoDTO catalogoDTO) {
         Catalogo catalogo = catalogoMapperService.resgistroDTOToEntity(catalogoDTO);
 
         return  catalogoRepository.registrarCatalogo(
