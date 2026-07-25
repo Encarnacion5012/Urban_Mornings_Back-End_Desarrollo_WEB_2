@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.ResponseCatalogoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +15,7 @@ public interface CatalogoRepository extends JpaRepository<Catalogo, Integer> {
 
 
     @Query(value = "EXEC casp_RegistroCatalogo :nombre, :descripcion, :precio, :tipo, :categoria_Desayuno,:imagen_url,:activo", nativeQuery = true)
-    Catalogo registrarCatalogo(
+    ResponseCatalogoProjection registrarCatalogo(
             @Param("nombre") String nombre,
             @Param("descripcion") String descripcion,
             @Param("precio") BigDecimal precio,
@@ -24,8 +25,8 @@ public interface CatalogoRepository extends JpaRepository<Catalogo, Integer> {
             @Param("activo")  boolean activo
             );
 
-    @Query(value = "EXEC casp_ListarTodos", nativeQuery = true)
-    List<Catalogo> listarTodos();
+    @Query(value = "EXEC casp_ListarTodosCatalogos", nativeQuery = true)
+    List<ResponseCatalogoProjection> listarTodos();
 
 
 }

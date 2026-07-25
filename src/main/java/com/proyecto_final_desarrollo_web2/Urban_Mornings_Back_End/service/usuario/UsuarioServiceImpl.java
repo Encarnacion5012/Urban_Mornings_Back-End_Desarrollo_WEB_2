@@ -1,6 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.UsuarioRepository;
@@ -8,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,12 +22,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Transactional
     @Override
-    public Usuario registroUsuario(RegistroUsuarioDTO dto) {
+    public UUID registroUsuario(RegistroUsuarioDTO dto) {
         Usuario usuario = usuarioMapperService.registroDtoToEntity(dto);
 
         usuario.setIdUsuario(generar_UUid_Usuario());
 
-       return usuarioRepository.registarUsuario(
+       usuarioRepository.registarUsuario(
                 usuario.getIdUsuario(),
                 usuario.getCedula(),
                 usuario.getNombre_Completo(),
@@ -36,10 +38,15 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 usuario.getImagen_url(),
                 usuario.isActivo()
         );
+       return usuario.getIdUsuario();
 
 
     }
 
+
+    public List<ResponseUsuarioProjection> listarUsuarios() {
+        return usuarioRepository.listarUsuarios();
+    }
 
     private UUID generar_UUid_Usuario() {
         UUID uuid_Generado = UUID.randomUUID();
@@ -52,6 +59,9 @@ public class UsuarioServiceImpl implements IUsuarioService {
         }
 
     }
+
+
+
 
 
 

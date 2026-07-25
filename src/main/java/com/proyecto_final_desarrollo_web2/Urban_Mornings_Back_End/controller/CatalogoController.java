@@ -1,7 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.RegistroCatalogoDTO;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.ResponseCatalogoDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.ResponseCatalogoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.CatalogoMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.catalogo.ICatalogoService;
@@ -24,19 +24,17 @@ public class CatalogoController {
 
     @PostMapping("/registar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseCatalogoDTO> registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
-        Catalogo catalogo = catalogoService.registroCatalgo(catalogoDTO);
+    public ResponseEntity<ResponseCatalogoProjection> registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
+        ResponseCatalogoProjection catalogo = catalogoService.registroCatalgo(catalogoDTO);
 
-        return ResponseEntity.ok().body(catalogoMapperService.entityToDTO(catalogo));
+        return ResponseEntity.ok().body(catalogo);
 
     }
 
 
     @GetMapping("/listar")
-    public ResponseEntity<List<ResponseCatalogoDTO>> listarCatalogos(){
-        List<ResponseCatalogoDTO> catalogos = catalogoService.listarTodos().stream()
-                .map(catalogoMapperService::entityToDTO)
-                .toList();
+    public ResponseEntity<List<ResponseCatalogoProjection>> listarCatalogos(){
+        List<ResponseCatalogoProjection> catalogos = catalogoService.listarTodos();
 
         return ResponseEntity.ok().body(catalogos);
     }

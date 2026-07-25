@@ -10,7 +10,7 @@ public record RegistroClienteDTO(
      String nombre_Completo,
 
      @NotBlank(message = "EL numero de cedula no debe estar en blanco")
-     @Pattern(regexp = "^\\d{3}-\\d{7}-\\d{3}$", message = "indudusca una cedula valida ejemplo: 000-0000000-000")
+     @Pattern(regexp = "^\\d{3}-\\d{7}-\\d{1}$", message = "indudusca una cedula valida ejemplo: 000-0000000-0")
      String cedula,
 
      @NotBlank( message = "El campo email no debe estar en blanco")
