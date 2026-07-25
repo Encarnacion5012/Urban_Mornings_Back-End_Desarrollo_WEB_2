@@ -17,7 +17,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapperService usuarioMapperService;
 
-
     @Transactional
     @Override
     public Usuario registroUsuario(RegistroUsuarioDTO dto) {
@@ -25,7 +24,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         usuario.setIdUsuario(generar_UUid_Usuario());
 
-       return usuarioRepository.registarUsuario(
+        return usuarioRepository.registarUsuario(
                 usuario.getIdUsuario(),
                 usuario.getCedula(),
                 usuario.getNombre_Completo(),
@@ -34,27 +33,19 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 usuario.getClave(),
                 usuario.getRol().name(),
                 usuario.getImagen_url(),
-                usuario.isActivo()
-        );
-
+                usuario.isActivo());
 
     }
-
 
     private UUID generar_UUid_Usuario() {
         UUID uuid_Generado = UUID.randomUUID();
 
         if (usuarioRepository.existsByIdUsuario(uuid_Generado)) {
             return generar_UUid_Usuario();
-        }
-        else {
+        } else {
             return uuid_Generado;
         }
 
     }
-
-
-
-
 
 }

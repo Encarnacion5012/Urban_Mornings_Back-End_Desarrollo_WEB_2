@@ -16,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id_usuario")
+@EqualsAndHashCode(of = "idUsuario")
 
 @Entity
 @Table(name = "usuarios")
@@ -54,10 +54,6 @@ public class Usuario implements UserDetails, IAppUser {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rol.name()));
     }
-
-    // Implementacion de los metodo de IAppU ser para recopilar los datos sin usar
-    // los instances of
-    // EN el token service
 
     @Override
     public String getUrl_Imagen() {

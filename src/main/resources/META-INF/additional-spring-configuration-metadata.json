@@ -1,0 +1,27 @@
+{"properties": [
+  {
+    "name": "spring.jpa.naming.physical-strategy",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.jpa.naming.physical-strategy'"
+  },
+  {
+    "name": "app.jwt.issuer",
+    "type": "java.lang.String",
+    "description": "A description for 'app.jwt.issuer'"
+  },
+  {
+    "name": "jwtKeys.private-key-path",
+    "type": "java.lang.String",
+    "description": "A description for 'jwtKeys.private-key-path'"
+  },
+  {
+    "name": "jwtKeys.publicKeyPath",
+    "type": "java.lang.String",
+    "description": "A description for 'jwtKeys.publicKeyPath'"
+  },
+  {
+    "name": "app.security.jwt-secret",
+    "type": "java.lang.String",
+    "description": "A description for 'app.security.jwt-secret'"
+  }
+]}

@@ -9,22 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
-
 public abstract class ClienteMapperService {
 
-   protected final PasswordEncoder passwordEncoder;
-
-
-    ClienteMapperService(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-
+    @Autowired
+    protected PasswordEncoder passwordEncoder;
 
     @Mapping(target = "clienteId", ignore = true)
+    @Mapping(target = "pedidos", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "rol", constant = "CLIENTE")
     @Mapping(target = "fecha_Registro", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "clave", expression = "java(passwordEncoder.encode(registroDto.clave()))")
-    @Mapping(target = "nombreCompleto", source= "nombre_Completo")
+    @Mapping(target = "nombreCompleto", source = "nombre_Completo")
     public abstract Cliente registerDtoTOEntity(RegistroClienteDTO registroDto);
 
     @Mapping(target = "telefono", source = "cliente.telefono")
