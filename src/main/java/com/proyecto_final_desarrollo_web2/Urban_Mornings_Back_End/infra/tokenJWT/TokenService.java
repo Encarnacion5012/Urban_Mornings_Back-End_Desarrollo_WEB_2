@@ -1,8 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.security.IAppUser;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,7 +15,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

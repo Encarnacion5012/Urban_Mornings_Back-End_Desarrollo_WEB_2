@@ -3,21 +3,21 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente_Usuario_Roles;
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Mapper(componentModel = "spring")
 
 public abstract class ClienteMapperService {
 
-   @Autowired
-   protected PasswordEncoder passwordEncoder;
+   protected final PasswordEncoder passwordEncoder;
+
+
+    ClienteMapperService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @Mapping(target = "clienteId", ignore = true)
