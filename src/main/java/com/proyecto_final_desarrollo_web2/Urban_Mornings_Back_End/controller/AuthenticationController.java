@@ -43,7 +43,6 @@ public class AuthenticationController {
     private final TokenService tokenService;
     private final IClientesService  clienteService;
     private final ClienteMapperService clienteMapperService;
-    private final UsuarioMapperService usuarioMapperService;
     private final IUsuarioService usuarioService;
 
     @PostMapping("/login")

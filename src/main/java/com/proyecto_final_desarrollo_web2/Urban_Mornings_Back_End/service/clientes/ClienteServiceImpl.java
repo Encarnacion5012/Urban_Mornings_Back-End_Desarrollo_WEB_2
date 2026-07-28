@@ -45,7 +45,7 @@ public class ClienteServiceImpl implements IClientesService {
                 cliente.getFecha_Registro()
                 );
 
-     ;
+
 
 
     }
