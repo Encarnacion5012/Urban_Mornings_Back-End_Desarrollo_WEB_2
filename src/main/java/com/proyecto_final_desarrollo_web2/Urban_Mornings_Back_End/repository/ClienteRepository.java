@@ -1,9 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente_Usuario_Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +20,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     boolean existsByClienteId(UUID clienteId);
 
 
-    @Modifying
+
     @Query(value = """
         EXEC  csp_RegistroCLientes :id, :cedula, :nombre_Completo, :correo, :telefono, :clave, :rol, :imagen_url, :fecha_Registro
 """, nativeQuery = true)
-    void registrarCLiente (
+    Cliente registrarCLiente (
             @Param("id") UUID id,
             @Param("cedula") String cedula,
             @Param("nombre_Completo") String nombre_Completo,

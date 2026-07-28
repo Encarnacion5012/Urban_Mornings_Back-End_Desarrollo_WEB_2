@@ -1,5 +1,3 @@
-
-
 spring:
   application:
     name: proyecto-final-desarrollo-web2
@@ -19,8 +17,8 @@ spring:
     show-sql: true
     properties:
       hibernate:
-        format_sql: true
-        highlight_sql: true
+        "[format_sql]": true
+        "[highlight_sql]": true
 
   flyway:
     enabled: true
@@ -33,7 +31,7 @@ spring:
 # 'logging' va en la raíz principal (al mismo nivel que 'spring' y 'server')
 logging:
   level:
-    org.hibernate.SQL: DEBUG
+    "[org.hibernate.SQL]": DEBUG
 
 # Si esta es una propiedad tuya personalizada, va en la raíz o dentro de spring según la programaras
 app:
@@ -42,13 +40,9 @@ app:
   security:
     jwt-secret: ${JWT-SECRET:Urban_Mornings_Proyecto_Programacion_WEB2_UNIVERSIDAD_DOMINICO_AMERICANO}
 
-
-
 server:
   port: 9090
 
 jwtKeys:
   privateKeyPath: jwtKeys/private.key.pem
   publicKeyPath: jwtKeys/public.key.pem
-
-

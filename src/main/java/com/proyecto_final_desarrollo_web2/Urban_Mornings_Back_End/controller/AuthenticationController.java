@@ -4,11 +4,16 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 import com.nimbusds.jose.JOSEException;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.LoginDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenJWTDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes.IClientesService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario.IUsuarioService;
 import jakarta.validation.Valid;
@@ -28,7 +33,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -56,20 +60,20 @@ public class AuthenticationController {
 
 
     @PostMapping("/register/clientes")
-    public ResponseEntity registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        UUID cliente_id = clienteService.registroClientes(registroDto);
-        URI uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente_id).toUri();
-        return ResponseEntity.created(uri).build();
+    public ResponseEntity<ResponseClienteDTO> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        Cliente cliente = clienteService.registroClientes(registroDto);
+        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getClienteId()).toUri();
+        return ResponseEntity.created(Uri).body(clienteMapperService.entityToResponseDto(cliente));
     }
 
     @PostMapping("/register/usuarios")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        UUID usuario_id = usuarioService.registroUsuario(registroDto);
+    public ResponseEntity<ResponseUsuarioProjection> registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        ResponseUsuarioProjection usuario = usuarioService.registroUsuario(registroDto);
 
-        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario_id).toUri();
+        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getId_usuario()).toUri();
 
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(usuario);
 
     }
 

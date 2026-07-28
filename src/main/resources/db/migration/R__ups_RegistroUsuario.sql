@@ -17,6 +17,14 @@ SET NOCOUNT ON;
 INSERT INTO usuarios(id_usuario,cedula, nombre_Completo, correo, telefono, clave, rol,imagen_url, activo)
 VALUES(@id_usuario, @cedula, @nombre_Completo, @correo, @telefono, @clave, @rol,@imagen_url, @activo );
 
-
+SELECT usuarios.id_usuario,
+       usuarios.cedula,
+       usuarios.nombre_Completo,
+       usuarios.correo,
+       usuarios.telefono,
+       usuarios.imagen_url,
+       usuarios.rol
+FROM usuarios
+WHERE usuarios.id_usuario = @id_usuario;
 
 END

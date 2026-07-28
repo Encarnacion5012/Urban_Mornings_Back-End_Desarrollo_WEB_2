@@ -1,0 +1,10 @@
+package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.detalle_pedido;
+
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.detalle_pedido.RegistroDetallePedidoDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_Pedido;
+
+public interface IDetalle_PedidoService {
+
+    Detalle_Pedido registroDetallePedido(RegistroDetallePedidoDTO detallePedidoDTO);
+
+}

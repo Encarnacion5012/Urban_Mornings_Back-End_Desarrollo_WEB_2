@@ -22,7 +22,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
 
     //Llamamos al storaged procedue con los parametros
-    @Modifying
+
     @Query(value = """
         EXEC usp_RegistroUsuario 
         :id_usuario,
@@ -35,7 +35,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
         :imagen_url,
         :activo
 """, nativeQuery = true)
-    void registarUsuario(
+    ResponseUsuarioProjection registarUsuario(
            @Param("id_usuario") UUID id_usuario,
            @Param("cedula") String cedula,
            @Param("nombre_Completo") String nombre_Completo,

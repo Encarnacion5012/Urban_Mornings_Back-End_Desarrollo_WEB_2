@@ -12,16 +12,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "cliente_Id")
-
+@EqualsAndHashCode(of = "pago_Id") // 1. Aquí ponemos el nombre exacto de tu variable
 
 @Entity
 @Table(name = "pagos")
 public class Pago {
 
-    @Id
+    @Id // 2. Esto vuelve a ser @Id obligatoriamente
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID pago_Id;
+    private UUID pago_Id; // Esta es la variable que Lombok está buscando
 
     private BigDecimal monto_Pagado;
 
@@ -35,6 +34,5 @@ public class Pago {
     private String transaccion_Id;
 
     private LocalDateTime fecha_Pago;
-
 
 }

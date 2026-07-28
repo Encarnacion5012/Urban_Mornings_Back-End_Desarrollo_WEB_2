@@ -16,8 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id_usuario")
-
+@EqualsAndHashCode(of = "idUsuario")
 
 @Entity
 @Table(name = "usuarios")
@@ -27,7 +26,6 @@ public class Usuario implements UserDetails, IAppUser {
     private UUID idUsuario;
 
     private String cedula;
-
 
     private String nombre_Completo;
     private String correo;
@@ -41,7 +39,6 @@ public class Usuario implements UserDetails, IAppUser {
     private boolean activo;
 
     private String telefono;
-
 
     @Override
     public String getUsername() {
@@ -58,11 +55,6 @@ public class Usuario implements UserDetails, IAppUser {
         return List.of(new SimpleGrantedAuthority(rol.name()));
     }
 
-
-
-    //Implementacion de los metodo de IAppU ser para recopilar los datos sin usar los  instances of
-    //EN el token service
-
     @Override
     public String getUrl_Imagen() {
         return this.getImagen_url();
@@ -73,5 +65,3 @@ public class Usuario implements UserDetails, IAppUser {
         return this.getIdUsuario();
     }
 }
-
-

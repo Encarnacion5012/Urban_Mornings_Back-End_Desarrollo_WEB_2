@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IUsuarioService {
-    public UUID registroUsuario(RegistroUsuarioDTO dto);
+    public ResponseUsuarioProjection registroUsuario(RegistroUsuarioDTO dto);
     public List<ResponseUsuarioProjection> listarUsuarios();
 }
