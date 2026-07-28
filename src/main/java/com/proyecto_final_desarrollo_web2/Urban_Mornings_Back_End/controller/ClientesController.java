@@ -3,6 +3,7 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
@@ -26,11 +27,9 @@ public class ClientesController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/todos")
-    public ResponseEntity<List<ResponseClienteDTO>> listarClientes(){
+    public ResponseEntity<List<ResponseClienteProjection>> listarClientes(){
 
-        List<ResponseClienteDTO> clientes = clienteRepository.listarClientes().stream()
-                .map(clienteMapperService::entityToResponseDto)
-                .toList();
+        List<ResponseClienteProjection> clientes = clienteRepository.listarClientes();
 
         return ResponseEntity.ok(clientes);
     }
