@@ -1,6 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.exeption.exeptions.EmailAlreadyExistExeption;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
@@ -22,7 +23,7 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public Cliente registroClientes(RegistroClienteDTO registroDto){
+    public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto){
 
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
@@ -51,7 +52,7 @@ public class ClienteServiceImpl implements IClientesService {
     }
 
 
-    public List<Cliente> listarClientesProcedue(){
+    public List<ResponseClienteProjection> listarClientesProcedue(){
         return clienteRepository.listarClientes();
     }
 

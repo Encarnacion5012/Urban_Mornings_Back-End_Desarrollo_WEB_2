@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,7 +25,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     @Query(value = """
         EXEC  csp_RegistroCLientes :id, :cedula, :nombre_Completo, :correo, :telefono, :clave, :rol, :imagen_url, :fecha_Registro
 """, nativeQuery = true)
-    Cliente registrarCLiente (
+    ResponseClienteProjection registrarCLiente (
             @Param("id") UUID id,
             @Param("cedula") String cedula,
             @Param("nombre_Completo") String nombre_Completo,
@@ -38,7 +39,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
             );
 
     @Query(value = "EXEC csp_ListarClientes", nativeQuery = true)
-    List<Cliente>listarClientes();
+    List<ResponseClienteProjection>listarClientes();
 
 
 

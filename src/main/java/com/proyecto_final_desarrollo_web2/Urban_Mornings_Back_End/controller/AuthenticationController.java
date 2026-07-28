@@ -4,16 +4,12 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 import com.nimbusds.jose.JOSEException;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.LoginDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenJWTDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes.IClientesService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario.IUsuarioService;
 import jakarta.validation.Valid;
@@ -59,10 +55,10 @@ public class AuthenticationController {
 
 
     @PostMapping("/register/clientes")
-    public ResponseEntity<ResponseClienteDTO> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        Cliente cliente = clienteService.registroClientes(registroDto);
-        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getClienteId()).toUri();
-        return ResponseEntity.created(Uri).body(clienteMapperService.entityToResponseDto(cliente));
+    public ResponseEntity<ResponseClienteProjection> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        ResponseClienteProjection cliente = clienteService.registroClientes(registroDto);
+        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getCliente_Id()).toUri();
+        return ResponseEntity.created(Uri).body(cliente);
     }
 
     @PostMapping("/register/usuarios")
