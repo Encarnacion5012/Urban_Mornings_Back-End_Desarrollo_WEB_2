@@ -7,7 +7,9 @@ CREATE OR ALTER PROCEDURE  usp_ListarUsuarios
                usuarios.cedula,
                usuarios.nombre_Completo,
                usuarios.correo,
-               usuarios.telefono
+               usuarios.telefono,
+               usuarios.imagen_url,
+               usuarios.rol
                FROM usuarios
         WHERE usuarios.activo = 1;
 

@@ -10,7 +10,8 @@ SELECT catalogo.catalogo_id,
        catalogo.precio,
        catalogo.tipo,
        catalogo.categoria_Desayuno,
-       catalogo.imagen_Url
+       catalogo.imagen_Url,
+       catalogo.nombre
        FROM catalogo
 WHERE catalogo.activo = 1;
 
