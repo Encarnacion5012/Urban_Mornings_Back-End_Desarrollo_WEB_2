@@ -21,7 +21,5 @@ SET NOCOUNT ON
 INSERT INTO clientes(cliente_Id,cedula, nombre_Completo, correo, telefono, clave , rol, imagen_url, fecha_Registro)
 VALUES(@cliente_Id, @cedula, @nombre_Completo, @correo, @telefono, @clave, @rol, @imagen_url, @fecha_Registro)
 
-SELECT cliente_Id,cedula, nombre_Completo, correo, telefono, clave , rol, imagen_url, fecha_Registro FROM clientes
-WHERE cliente_Id = @cliente_Id;
 
 END;

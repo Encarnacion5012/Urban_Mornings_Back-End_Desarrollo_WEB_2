@@ -5,21 +5,16 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.Re
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
-public abstract class UsuarioMapperService {
-
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
+public interface UsuarioMapperService {
 
     @Mapping(target = "idUsuario", ignore = true)
     @Mapping(target = "activo", ignore = true)
     @Mapping(target = "authorities", ignore = true)
-    @Mapping(target = "clave", expression = "java(passwordEncoder.encode(usuarioDTO.clave()))")
-    public abstract Usuario registroDTOToEntity(RegistroUsuarioDTO usuarioDTO);
+    // Se eliminó la encriptación de la clave. MapStruct la pasará en texto plano automáticamente.
+    Usuario registroDTOToEntity(RegistroUsuarioDTO usuarioDTO);
 
     @Mapping(target = "idUsuario", source = "usuario.idUsuario")
-    public abstract ResponseUsuarioDto entityToResponseDto(Usuario usuario);
+    ResponseUsuarioDto entityToResponseDto(Usuario usuario);
 }

@@ -1,6 +1,9 @@
 spring:
   application:
     name: proyecto-final-desarrollo-web2
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=Urban_Mornings;encrypt=true;trustServerCertificate=true
@@ -32,6 +35,7 @@ spring:
 logging:
   level:
     "[org.hibernate.SQL]": DEBUG
+    "[org.springframework.security]": DEBUG
 
 # Si esta es una propiedad tuya personalizada, va en la raíz o dentro de spring según la programaras
 app:

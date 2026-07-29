@@ -19,18 +19,19 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "clienteId")
-
-
 @Entity
 @Table(name = "clientes")
 public class Cliente implements UserDetails, IAppUser {
+    
     @Id
     @Column(name = "cliente_Id")
     private UUID clienteId;
 
     private String cedula;
+    
     @Column(name = "nombre_Completo")
     private String nombreCompleto;
+    
     private String correo;
     private String telefono;
     private String clave;
@@ -38,12 +39,11 @@ public class Cliente implements UserDetails, IAppUser {
 
     @Enumerated(EnumType.STRING)
     private Cliente_Usuario_Roles rol;
+    
     private LocalDateTime fecha_Registro;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cliente")
     private List<Pedido> pedidos;
-
-
 
     @Override
     public String getUsername() {
@@ -57,14 +57,11 @@ public class Cliente implements UserDetails, IAppUser {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rol.name()));
+        // Se agregó el prefijo ROLE_ para estandarizar con tu configuración de seguridad
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
     }
 
-
-
-    //Implementacion de los metodo de IAppU ser para recopilar los datos sin usar los  instances of
-    //EN el token service
-
+    // Implementación de los métodos de IAppUser
     @Override
     public String getUrl_Imagen() {
         return this.getImagen_url();
@@ -80,5 +77,24 @@ public class Cliente implements UserDetails, IAppUser {
         return this.getClienteId();
     }
 
-}
+    // MÉTODOS OBLIGATORIOS DE USERDETAILS FALTANTES
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; 
+    }
+}
