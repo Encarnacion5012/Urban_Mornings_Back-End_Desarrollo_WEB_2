@@ -2,11 +2,23 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedid
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.RegistroPedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoMapperService;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_Pedido;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.CatalogoRepository;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.Detalle_PedidoRepository;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.PedidoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -14,15 +26,67 @@ public class PedidoServiceImpl implements IPedidoService {
 
     private final PedidoRepository pedidoRepository;
     private final PedidoMapperService mapperService;
+    private final ClienteRepository clienteRepository;
+    private final CatalogoRepository catalogoRepository;
+    private final Detalle_PedidoRepository detallePedidoRepository;
 
     @Override
     @Transactional
     public Pedido registroPedido(RegistroPedidoDTO registroPedidoDTO) {
         
-        // 1. Usamos tu Mapper de MapStruct para traducir
+
         Pedido nuevoPedido = mapperService.registroDTOToEntity(registroPedidoDTO);
-        
-        // 2. Guardamos el pedido en SQL
-        return pedidoRepository.save(nuevoPedido);
+
+        Cliente cliente = clienteRepository.findById(registroPedidoDTO.cliente_Id())
+                .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
+
+
+            nuevoPedido.setCliente(cliente);
+            nuevoPedido.setPedido_Id(UUID.randomUUID());
+
+            nuevoPedido.setCodigo_Retiro(generarCodigoretiroPedido());
+            nuevoPedido = pedidoRepository.save(nuevoPedido);
+
+            List<Detalle_Pedido> detallePedidos = registroPedidoDTO.items().stream()
+                    .map(dp-> {
+                        Catalogo catalogo = catalogoRepository.findById(dp.catalogoId())
+                                .orElseThrow(() -> new EntityNotFoundException("Catalogo no encontrado"));
+
+                        Detalle_Pedido detallePedido = new Detalle_Pedido();
+                        detallePedido.setDetalle_Id(generarUUID());
+                        detallePedido.setCatalogo(catalogo);
+                        detallePedido.setPrecio_Unitario(catalogo.getPrecio());
+                        detallePedido.setCantidad(dp.cantidad());
+                        detallePedido.setSub_Total(catalogo.getPrecio().multiply(BigDecimal.valueOf(detallePedido.getCantidad())));
+
+                        return detallePedido;
+                    }).toList();
+
+            nuevoPedido.hacerAdopcionPedido(detallePedidos);
+            detallePedidoRepository.saveAll(detallePedidos);
+
+        return nuevoPedido;
+    }
+
+
+    private UUID generarUUID(){
+        return UUID.randomUUID();
+    }
+
+
+    private Long generarCodigoretiroPedido(){
+        long min = 1_000_000_000L;
+        long max = 9_999_999_999L;
+
+        long codigo_Retiro;
+        boolean existe;
+        do {
+            codigo_Retiro = ThreadLocalRandom.current().nextLong(min,max);
+            existe = pedidoRepository.existsByCodigo_Retiro(codigo_Retiro);
+
+        }while (existe);
+
+       return codigo_Retiro;
+
     }
 }

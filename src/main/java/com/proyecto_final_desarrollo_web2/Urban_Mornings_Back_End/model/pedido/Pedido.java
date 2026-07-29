@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +41,14 @@ public class Pedido {
     private LocalDateTime fecha_Creacion;
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Detalle_Pedido> detallesPedido;
+    private List<Detalle_Pedido> detallesPedido = new ArrayList<>();
 
+
+    //Metodo para hacer la aptopcion de detalles
+
+    public void hacerAdopcionPedido(List<Detalle_Pedido> detalles) {
+        this.detallesPedido.addAll(detalles);
+        detalles.forEach(d -> d.setPedido(this));
+
+    }
 }

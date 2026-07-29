@@ -23,4 +23,6 @@ public interface Detalle_PedidoRepository extends JpaRepository<Detalle_Pedido, 
             @Param("precio_Unitario") BigDecimal precio_Unitario,
             @Param("sub_Total") BigDecimal sub_Total
     );
+
+    boolean existsByDetalle_Id(UUID detalle_Id);
 }
