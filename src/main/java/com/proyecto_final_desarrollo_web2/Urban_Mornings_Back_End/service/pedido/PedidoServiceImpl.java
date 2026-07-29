@@ -5,6 +5,7 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoM
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_Pedido;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pago.Pago;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.CatalogoRepository;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
@@ -16,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -65,6 +68,13 @@ public class PedidoServiceImpl implements IPedidoService {
             nuevoPedido.hacerAdopcionPedido(detallePedidos);
             detallePedidoRepository.saveAll(detallePedidos);
 
+        Pago pago = new Pago();
+        pago.setPago_Id(generarUUID());
+        pago.setPedido(nuevoPedido);
+        pago.setMetodo_Pago(registroPedidoDTO.paymentMethod());
+        pago.setFecha_Pago(LocalDateTime.now());
+        pago.setTransaccion_Id(generarTransactionIds(100));
+
         return nuevoPedido;
     }
 
@@ -88,5 +98,21 @@ public class PedidoServiceImpl implements IPedidoService {
 
        return codigo_Retiro;
 
+    }
+
+
+    private String generarTransactionIds(int tamanio) {
+         final String CARACTERES_PERMITIDOS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+         final SecureRandom random = new SecureRandom();
+
+         StringBuilder stringBuilder = new StringBuilder();
+
+         for (int i = 0; i < tamanio; i++) {
+             int indiceAleatorio = random.nextInt(CARACTERES_PERMITIDOS.length());
+             stringBuilder.append(CARACTERES_PERMITIDOS.charAt(indiceAleatorio));
+
+         }
+
+         return stringBuilder.toString();
     }
 }
