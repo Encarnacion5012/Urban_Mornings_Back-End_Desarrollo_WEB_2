@@ -43,8 +43,6 @@ public class PedidoServiceImpl implements IPedidoService {
 
 
             nuevoPedido.setCliente(cliente);
-            nuevoPedido.setPedidoId(UUID.randomUUID());
-
             nuevoPedido.setCodigoRetiro(generarCodigoretiroPedido());
 
 
@@ -54,7 +52,6 @@ public class PedidoServiceImpl implements IPedidoService {
                                 .orElseThrow(() -> new EntityNotFoundException("Catalogo no encontrado"));
 
                         Detalle_Pedido detallePedido = new Detalle_Pedido();
-                        detallePedido.setDetalleId(generarUUID());
                         detallePedido.setCatalogo(catalogo);
                         detallePedido.setPrecio_Unitario(catalogo.getPrecio());
                         detallePedido.setCantidad(dp.cantidad());
@@ -75,16 +72,18 @@ public class PedidoServiceImpl implements IPedidoService {
 
 
         Pago pago = new Pago();
-        pago.setPago_Id(generarUUID());
         pago.setPedido(nuevoPedido);
         pago.setMetodo_Pago(registroPedidoDTO.paymentMethod());
         pago.setFecha_Pago(LocalDateTime.now());
         pago.setTransaccion_Id(generarTransactionIds(100));
+        pago.setMonto_Pagado(nuevoPedido.getTotal_Pedido());
 
         pagoRepository.save(pago);
 
 
-        return pedidoRepository.detallarPedido(nuevoPedido.getPedidoId());
+        return pedidoRepository.detallarPedido(nuevoPedido.getPedidoId()).stream()
+                .findFirst()
+                .orElseThrow(()-> new EntityNotFoundException("Pedido no encontrado o hubi algun problema inesperado"));
     }
 
 

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
@@ -30,33 +31,14 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
 
 
     @Query(value = """
-    SELECT
-    pa.metodo_Pago AS paymentMethod,   
-    pe.pedidoId AS id,
-    pe.codigoRetiro AS withdrawalCode,
-    CAST(pe.fecha_Hora_Retiro AS LOCALDATE ) AS pickupDate,
-    CAST(pe.fecha_Hora_Retiro AS LOCALTIME ) AS pickupTime,
-    pe.total_Pedido AS total,
-    pe.dedicatoria AS dedication,
-    pe.fecha_Creacion AS createdAt,
-    dp.cantidad AS quantity,
-    ca.catalogo_id AS catalogo_id,
-    ca.nombre AS nombre,
-    ca.precio AS precio,
-    ca.tipo AS tipo,
-    ca.imagen_Url AS imagen_Url  
-    
-     FROM Pago pa
-     LEFT JOIN pa.pedido pe
-     LEFT JOIN  pe.detallesPedido dp
-     LEFT JOIN  dp.catalogo ca
-     
-     WHERE pa.pedido.pedidoId =:id_pedido     
-     
-     
-    
-""")
-    PedidoResponseProjection detallarPedido(@Param("id_pedido") UUID id_pedido);
+        SELECT pa 
+        FROM Pago pa 
+        JOIN FETCH pa.pedido pe 
+        LEFT JOIN FETCH pe.detallesPedido dp 
+        LEFT JOIN FETCH dp.catalogo 
+        WHERE pe.pedidoId = :id_pedido       
+    """)
+   Optional <PedidoResponseProjection> detallarPedido(@Param("id_pedido") UUID id_pedido);
 }
 
 

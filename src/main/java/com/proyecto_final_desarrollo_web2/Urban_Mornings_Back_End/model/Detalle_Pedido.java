@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "detalle_Id")
+@EqualsAndHashCode(of = "detalleId")
 
 
 @Entity

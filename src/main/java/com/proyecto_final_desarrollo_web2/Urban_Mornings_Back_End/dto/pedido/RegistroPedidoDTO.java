@@ -25,7 +25,7 @@ public record RegistroPedidoDTO(
 
 
         @NotNull(message = "La hora de recogida no debe ser nula")
-        @FutureOrPresent(message = "la hora de recogida no puede ser en el pasado")
+        //@FutureOrPresent(message = "la hora de recogida no puede ser en el pasado")
         LocalTime pickupTime,
 
 

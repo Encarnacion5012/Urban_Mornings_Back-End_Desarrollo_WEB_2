@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "pedido_Id")
+@EqualsAndHashCode(of = "pedidoId")
 
 
 @Entity
