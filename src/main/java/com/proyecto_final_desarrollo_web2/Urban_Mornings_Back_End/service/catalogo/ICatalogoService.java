@@ -8,4 +8,6 @@ import java.util.List;
 public interface ICatalogoService {
     public Catalogo registroCatalgo(RegistroCatalogoDTO catalogoDTO);
     public List<Catalogo> listarTodos();
+    public Catalogo actualizarCatalogo(Integer id, RegistroCatalogoDTO catalogoDTO);
+    public void eliminarCatalogo(Integer id);
 }

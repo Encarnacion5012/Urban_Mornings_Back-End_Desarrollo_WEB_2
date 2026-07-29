@@ -13,6 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CatalogoServiceImpl implements ICatalogoService {
+    
     private final CatalogoRepository catalogoRepository;
     private final CatalogoMapperService catalogoMapperService;
 
@@ -21,7 +22,7 @@ public class CatalogoServiceImpl implements ICatalogoService {
     public Catalogo registroCatalgo(RegistroCatalogoDTO catalogoDTO) {
         Catalogo catalogo = catalogoMapperService.resgistroDTOToEntity(catalogoDTO);
 
-        return  catalogoRepository.registrarCatalogo(
+        return catalogoRepository.registrarCatalogo(
                 catalogo.getNombre(),
                 catalogo.getDescripcion(),
                 catalogo.getPrecio(),
@@ -33,7 +34,35 @@ public class CatalogoServiceImpl implements ICatalogoService {
     }
 
     @Override
-    public List<Catalogo>listarTodos(){
+    public List<Catalogo> listarTodos(){
         return catalogoRepository.listarTodos();
+    }
+
+    @Transactional
+    @Override
+    public Catalogo actualizarCatalogo(Integer id, RegistroCatalogoDTO catalogoDTO) {
+        Catalogo catalogoExistente = catalogoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Catálogo no encontrado con el ID: " + id));
+
+        Catalogo datosNuevos = catalogoMapperService.resgistroDTOToEntity(catalogoDTO);
+
+        catalogoExistente.setNombre(datosNuevos.getNombre());
+        catalogoExistente.setDescripcion(datosNuevos.getDescripcion());
+        catalogoExistente.setPrecio(datosNuevos.getPrecio());
+        catalogoExistente.setTipo(datosNuevos.getTipo());
+        catalogoExistente.setCategoria_Desayuno(datosNuevos.getCategoria_Desayuno());
+        catalogoExistente.setImagen_Url(datosNuevos.getImagen_Url());
+        catalogoExistente.setActivo(datosNuevos.getActivo());
+
+        return catalogoRepository.save(catalogoExistente);
+    }
+
+    @Transactional
+    @Override
+    public void eliminarCatalogo(Integer id) {
+        Catalogo catalogoExistente = catalogoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Catálogo no encontrado con el ID: " + id));
+                
+        catalogoRepository.delete(catalogoExistente);
     }
 }

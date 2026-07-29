@@ -5,6 +5,8 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.Detalle
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_Pedido;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.Detalle_PedidoRepository;
 import jakarta.transaction.Transactional;
+import java.util.UUID;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,59 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
     @Override
     @Transactional
     public Detalle_Pedido registroDetallePedido(RegistroDetallePedidoDTO detallePedidoDTO) {
-
-        // 1. Usamos tu Mapper automático de MapStruct
+        
         Detalle_Pedido detalle = mapperService.registroDTOToEntity(detallePedidoDTO);
+        
+        if (detalle.getDetalle_Id() == null) {
+            detalle.setDetalle_Id(UUID.randomUUID());
+        }
 
+        detallePedidoRepository.registrarDetallePedido(
+                detalle.getDetalle_Id(),
+                detalle.getPedido().getPedido_Id(),
+                detalle.getCatalogo().getCatalogo_id(),
+                detalle.getCantidad(),
+                detalle.getPrecio_Unitario(),
+                detalle.getSub_Total()
+        );
 
-        return detallePedidoRepository.save(detalle);
+        return detalle;
+    }
+
+    @Override
+    @Transactional
+    public List<Detalle_Pedido> listarTodos() {
+        return detallePedidoRepository.listarTodos();
+    }
+
+    @Override
+    @Transactional
+    public Detalle_Pedido actualizarDetallePedido(UUID detalleId, RegistroDetallePedidoDTO detallePedidoDTO) {
+        
+        Detalle_Pedido detalleExistente = detallePedidoRepository.findById(detalleId)
+                .orElseThrow(() -> new RuntimeException("Detalle de pedido no encontrado con el ID: " + detalleId));
+        
+        Detalle_Pedido datosNuevos = mapperService.registroDTOToEntity(detallePedidoDTO);
+
+        detallePedidoRepository.actualizarDetallePedido(
+                detalleExistente.getDetalle_Id(),
+                datosNuevos.getPedido().getPedido_Id(),
+                datosNuevos.getCatalogo().getCatalogo_id(),
+                datosNuevos.getCantidad(),
+                datosNuevos.getPrecio_Unitario(),
+                datosNuevos.getSub_Total()
+        );
+
+        return detallePedidoRepository.findById(detalleId).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void eliminarDetallePedido(UUID detalleId) {
+        
+        Detalle_Pedido detalleExistente = detallePedidoRepository.findById(detalleId)
+                .orElseThrow(() -> new RuntimeException("Detalle no encontrado con el ID: " + detalleId));
+
+        detallePedidoRepository.eliminarDetallePedido(detalleExistente.getDetalle_Id());
     }
 }

@@ -7,6 +7,7 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,53 +18,90 @@ import java.util.UUID;
 public class ClienteServiceImpl implements IClientesService {
 
     private final ClienteRepository clienteRepository;
-    private  final ClienteMapperService clienteMapper;
-
+    private final ClienteMapperService clienteMapper;
+    private final PasswordEncoder passwordEncoder; 
 
     @Override
     @Transactional
-    public Cliente registroClientes(RegistroClienteDTO registroDto){
-
+    public Cliente registroClientes(RegistroClienteDTO registroDto) {
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
 
-        if(clienteRepository.existsByCorreo(cliente.getCorreo())){
+        if (clienteRepository.existsByCorreo(cliente.getCorreo())) {
             throw new EmailAlreadyExistExeption("Este correo ya esta registrado");
         }
 
         cliente.setClienteId(generarClienteId());
+        
+        // Encriptamos la clave antes de guardarla
+        cliente.setClave(passwordEncoder.encode(cliente.getClave()));
 
-        return clienteRepository.registrarCLiente(
+        // Ejecutamos el guardado
+        clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
                 cliente.getCedula(),
                 cliente.getNombre_Completo(),
                 cliente.getCorreo(),
                 cliente.getTelefono(),
                 cliente.getClave(),
-                cliente.getRol().name(),
+                "USER", // Asignamos el rol manualmente para evitar el NullPointerException
                 cliente.getImagen_url(),
                 cliente.getFecha_Registro()
-                );
+        );
+
+        return cliente;
     }
 
-
-    public List<Cliente> listarClientesProcedue(){
+    @Override
+    @Transactional
+    public List<Cliente> listarTodos() {
         return clienteRepository.listarClientes();
     }
 
-    //Generamos el uuid y compbromaos si existe en la base datos y si ese fuese el caso disparamos la fncion de nuevo
-    // hasta encontrar alguno que no este registrado
+    @Override
+    @Transactional
+    public Cliente actualizarCliente(UUID id, RegistroClienteDTO registroDto) {
 
-    private UUID generarClienteId(){
+        Cliente clienteExistente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
+
+        Cliente datosNuevos = clienteMapper.registerDtoTOEntity(registroDto);
+        
+        // También encriptamos si actualizan la clave
+        String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
+
+        clienteRepository.actualizarCliente(
+                clienteExistente.getClienteId(),
+                datosNuevos.getCedula(),
+                datosNuevos.getNombre_Completo(),
+                datosNuevos.getCorreo(),
+                datosNuevos.getTelefono(),
+                claveEncriptada, // Usamos la clave encriptada
+                "USER", // Mantenemos el rol
+                datosNuevos.getImagen_url()
+        );
+
+        return clienteRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void eliminarCliente(UUID id) {
+
+        Cliente clienteExistente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
+
+        clienteRepository.eliminarCliente(clienteExistente.getClienteId());
+    }
+
+    private UUID generarClienteId() {
 
         UUID id_generado = UUID.randomUUID();
 
-        if (clienteRepository.existsByClienteId(id_generado)){
-            return   generarClienteId();
+        if (clienteRepository.existsByClienteId(id_generado)) {
+            return generarClienteId();
+        } else {
+            return id_generado;
         }
-        else {
-            return  id_generado;
-        }
-
     }
 }

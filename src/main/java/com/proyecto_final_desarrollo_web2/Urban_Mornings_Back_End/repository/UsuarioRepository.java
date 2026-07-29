@@ -2,22 +2,26 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
-    //Implemtado como optional para mos comidadad en el authenticationService
+    
+    // Implementado como optional para mas comodidad en el authenticationService
     Optional<UserDetails> findByCorreo(String correo);
 
     boolean existsByIdUsuario(UUID id);
 
-
-
-    //Llamamos al storaged procedue con los parametros
+    // Agregamos las anotaciones y cambiamos a void
+    @Modifying
+    @Transactional
     @Query(value = """
         EXEC usp_RegistroUsuario 
         :id_usuario,
@@ -29,16 +33,39 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
         :rol,
         :imagen_url,
         :activo
-""", nativeQuery = true)
-    Usuario registarUsuario(
-           @Param("id_usuario") UUID id_usuario,
-           @Param("cedula") String cedula,
-           @Param("nombre_Completo") String nombre_Completo,
-           @Param("correo") String correo,
-           @Param("telefono") String telefono,
-           @Param("clave") String clave,
-           @Param("rol") String rol,
-           @Param("imagen_url") String imagen_url,
-           @Param("activo") boolean activo
+    """, nativeQuery = true)
+    void registarUsuario(
+            @Param("id_usuario") UUID id_usuario,
+            @Param("cedula") String cedula,
+            @Param("nombre_Completo") String nombre_Completo,
+            @Param("correo") String correo,
+            @Param("telefono") String telefono,
+            @Param("clave") String clave,
+            @Param("rol") String rol,
+            @Param("imagen_url") String imagen_url,
+            @Param("activo") boolean activo
     );
+
+    @Query(value = "SELECT * FROM usuario", nativeQuery = true)
+    List<Usuario> listarTodos();
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE usuario SET cedula = :cedula, nombre_Completo = :nombre_Completo, correo = :correo, telefono = :telefono, clave = :clave, rol = :rol, imagen_url = :imagen_url, activo = :activo WHERE id_usuario = :id_usuario", nativeQuery = true)
+    void actualizarUsuario(
+            @Param("id_usuario") UUID id_usuario,
+            @Param("cedula") String cedula,
+            @Param("nombre_Completo") String nombre_Completo,
+            @Param("correo") String correo,
+            @Param("telefono") String telefono,
+            @Param("clave") String clave,
+            @Param("rol") String rol,
+            @Param("imagen_url") String imagen_url,
+            @Param("activo") boolean activo
+    );
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM usuario WHERE id_usuario = :id_usuario", nativeQuery = true)
+    void eliminarUsuario(@Param("id_usuario") UUID id_usuario);
 }

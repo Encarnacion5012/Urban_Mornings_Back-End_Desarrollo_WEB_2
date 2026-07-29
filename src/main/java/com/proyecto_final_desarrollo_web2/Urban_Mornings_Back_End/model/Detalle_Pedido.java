@@ -26,7 +26,7 @@ public class Detalle_Pedido {
     @JoinColumn(name = "pedido_Id")
     private Pedido pedido;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "catalogo_id")
     private Catalogo catalogo;
 
