@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,11 @@ public interface PedidoResponseProjection {
 
     @Value("#{target.pedido.fecha_Creacion}")
     LocalDateTime getCreatedAt();
+
+    @Value("#{target.pedido.fecha_Hora_Retiro?.toLocalDate()}")
+    LocalDate getPickupDate();
+    @Value("#{target.pedido.fecha_Hora_Retiro?.toLocalTime()}")
+    LocalTime getPickupTime();
 
     // Enrutamos la lista de detalles hacia la sub-interfaz
     @Value("#{target.pedido.detallesPedido}")

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,6 +40,17 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
         WHERE pe.pedidoId = :id_pedido       
     """)
    Optional <PedidoResponseProjection> detallarPedido(@Param("id_pedido") UUID id_pedido);
+
+
+    @Query(value = """
+    SELECT DISTINCT pa FROM Pago pa
+    JOIN FETCH pa.pedido pe
+    LEFT JOIN FETCH pe.detallesPedido dp
+    LEFT JOIN FETCH dp.catalogo ca
+    
+    where pe.cliente.clienteId =:id_cliente
+""")
+    List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente")  UUID id_cliente);
 }
 
 

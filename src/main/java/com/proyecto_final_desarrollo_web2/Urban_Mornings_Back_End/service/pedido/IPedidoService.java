@@ -4,6 +4,10 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.Reg
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pago.Pago;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
 
+import java.util.List;
+import java.util.UUID;
+
 public interface IPedidoService {
     PedidoResponseProjection registroPedido(RegistroPedidoDTO registroPedidoDTO);
+    public List<PedidoResponseProjection> listarPedidosPorcliente(UUID id_cliente);
 }

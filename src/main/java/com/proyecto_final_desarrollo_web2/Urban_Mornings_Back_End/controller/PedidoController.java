@@ -7,13 +7,12 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedido
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -28,6 +27,12 @@ ResponseEntity<PedidoResponseProjection> registrarPedido(@RequestBody @Valid Reg
     URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(pedido.getId()).toUri();
 
     return ResponseEntity.created(uri).body(pedido);
+}
+
+@GetMapping("/listar/{id}")
+    public ResponseEntity<List<PedidoResponseProjection>> listarPedidos(@PathVariable UUID id) {
+    List<PedidoResponseProjection> pedidos = pedidoService.listarPedidosPorcliente(id);
+    return ResponseEntity.ok().body(pedidos);
 }
 
 }

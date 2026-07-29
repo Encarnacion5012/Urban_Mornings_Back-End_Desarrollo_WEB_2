@@ -87,9 +87,9 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
 
-    private UUID generarUUID(){
-        return UUID.randomUUID();
-    }
+   public List<PedidoResponseProjection> listarPedidosPorcliente(UUID id_cliente) {
+        return pedidoRepository.listarPedidosPorcliente(id_cliente);
+   }
 
 
     private Long generarCodigoretiroPedido(){
