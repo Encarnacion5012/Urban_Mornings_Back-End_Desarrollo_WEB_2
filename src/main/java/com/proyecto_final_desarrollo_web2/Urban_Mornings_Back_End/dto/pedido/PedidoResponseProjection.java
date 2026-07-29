@@ -22,7 +22,7 @@ public interface PedidoResponseProjection {
     @Value("#{target.pedido.estado_Actual}")
     Estado_Actual_Pedido getStatus();
 
-    @Value("#{target.total_Pedido}")
+    @Value("#{target.monto_Pagado}")
     BigDecimal getTotal();
 
     @Value("#{target.metodo_Pago}")
@@ -44,6 +44,9 @@ interface ItemsResponsePedidoProjection {
     @Value("#{target.cantidad}")
     Integer getQuantity();
 
+    @Value("#{target.precio_Unitario}")
+    BigDecimal getPrecio();
+
     @Value("#{target.catalogo}")
     ProductoResponsePedidoProjection getProduct();
 }
@@ -56,8 +59,7 @@ interface ProductoResponsePedidoProjection {
     @Value("#{target.nombre}")
     String getNombre();
 
-    @Value("#{target.precio}")
-    BigDecimal getPrecio();
+
 
     @Value("#{target.tipo}")
     Tipo_Catalogo getTipo();
