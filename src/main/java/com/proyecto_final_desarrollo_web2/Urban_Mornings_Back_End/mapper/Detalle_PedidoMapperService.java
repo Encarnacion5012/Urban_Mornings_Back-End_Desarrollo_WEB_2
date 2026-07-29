@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface Detalle_PedidoMapperService {
 
     @Mapping(target = "catalogo.catalogo_id", source = "catalogoId")
-    @Mapping(target = "detalle_Id", ignore = true)
+    @Mapping(target = "detalleId", ignore = true)
     @Mapping(target = "pedido", ignore = true)
     @Mapping(target = "cantidad", source = "dto.cantidad")
     @Mapping(target = "precio_Unitario", ignore = true)

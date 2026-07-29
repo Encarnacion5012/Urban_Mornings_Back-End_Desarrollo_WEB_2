@@ -47,7 +47,7 @@ public class PedidoServiceImpl implements IPedidoService {
             nuevoPedido.setCliente(cliente);
             nuevoPedido.setPedido_Id(UUID.randomUUID());
 
-            nuevoPedido.setCodigo_Retiro(generarCodigoretiroPedido());
+            nuevoPedido.setCodigoRetiro(generarCodigoretiroPedido());
             nuevoPedido = pedidoRepository.save(nuevoPedido);
 
             List<Detalle_Pedido> detallePedidos = registroPedidoDTO.items().stream()
@@ -56,7 +56,7 @@ public class PedidoServiceImpl implements IPedidoService {
                                 .orElseThrow(() -> new EntityNotFoundException("Catalogo no encontrado"));
 
                         Detalle_Pedido detallePedido = new Detalle_Pedido();
-                        detallePedido.setDetalle_Id(generarUUID());
+                        detallePedido.setDetalleId(generarUUID());
                         detallePedido.setCatalogo(catalogo);
                         detallePedido.setPrecio_Unitario(catalogo.getPrecio());
                         detallePedido.setCantidad(dp.cantidad());
@@ -67,6 +67,11 @@ public class PedidoServiceImpl implements IPedidoService {
 
             nuevoPedido.hacerAdopcionPedido(detallePedidos);
             detallePedidoRepository.saveAll(detallePedidos);
+            nuevoPedido.setTotal_Pedido(
+                    detallePedidos.stream()
+                            .map(Detalle_Pedido::getSub_Total)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            );
 
         Pago pago = new Pago();
         pago.setPago_Id(generarUUID());
@@ -92,7 +97,7 @@ public class PedidoServiceImpl implements IPedidoService {
         boolean existe;
         do {
             codigo_Retiro = ThreadLocalRandom.current().nextLong(min,max);
-            existe = pedidoRepository.existsByCodigo_Retiro(codigo_Retiro);
+            existe = pedidoRepository.existsByCodigoRetiro(codigo_Retiro);
 
         }while (existe);
 

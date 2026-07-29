@@ -31,7 +31,8 @@ public class Pedido {
 
     private LocalDateTime fecha_Hora_Retiro;
 
-    private Long codigo_Retiro; //Recordar meter el metodo que lo genere y sus exepciones al hacer el metodo registro
+    @Column(name = "codigo_Retiro")
+    private Long codigoRetiro; //Recordar meter el metodo que lo genere y sus exepciones al hacer el metodo registro
 
     @Enumerated(EnumType.STRING)
     private Estado_Actual_Pedido estado_Actual;

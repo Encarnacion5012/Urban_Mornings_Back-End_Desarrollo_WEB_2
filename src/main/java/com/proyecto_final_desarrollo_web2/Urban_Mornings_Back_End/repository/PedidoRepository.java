@@ -25,7 +25,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
             @Param("total_Pedido") BigDecimal total_Pedido,
             @Param("fecha_Creacion") LocalDateTime fecha_Creacion);
 
-    boolean existsByCodigo_Retiro(Long codigo_Retiro);
+    boolean existsByCodigoRetiro(Long codigo_Retiro);
 
 }
 

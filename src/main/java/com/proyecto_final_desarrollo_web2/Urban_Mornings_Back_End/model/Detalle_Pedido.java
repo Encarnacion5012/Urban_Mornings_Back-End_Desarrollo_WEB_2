@@ -20,7 +20,8 @@ import java.util.UUID;
 public class Detalle_Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID detalle_Id;
+    @Column(name = "detalle_Id")
+    private UUID detalleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_Id")
