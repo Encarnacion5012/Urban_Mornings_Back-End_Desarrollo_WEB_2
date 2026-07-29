@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedido;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.RegistroPedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
@@ -7,10 +8,7 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pago.Pago;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.CatalogoRepository;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.Detalle_PedidoRepository;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.PedidoRepository;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +30,23 @@ public class PedidoServiceImpl implements IPedidoService {
     private final ClienteRepository clienteRepository;
     private final CatalogoRepository catalogoRepository;
     private final Detalle_PedidoRepository detallePedidoRepository;
+    private final PagoRepository pagoRepository;
 
     @Override
     @Transactional
-    public Pedido registroPedido(RegistroPedidoDTO registroPedidoDTO) {
-        
-
-        Pedido nuevoPedido = mapperService.registroDTOToEntity(registroPedidoDTO);
+    public PedidoResponseProjection registroPedido(RegistroPedidoDTO registroPedidoDTO) {
 
         Cliente cliente = clienteRepository.findById(registroPedidoDTO.cliente_Id())
                 .orElseThrow(() -> new EntityNotFoundException("Cliente no encontrado"));
 
+        Pedido nuevoPedido = mapperService.registroDTOToEntity(registroPedidoDTO);
+
 
             nuevoPedido.setCliente(cliente);
-            nuevoPedido.setPedido_Id(UUID.randomUUID());
+            nuevoPedido.setPedidoId(UUID.randomUUID());
 
             nuevoPedido.setCodigoRetiro(generarCodigoretiroPedido());
-            nuevoPedido = pedidoRepository.save(nuevoPedido);
+
 
             List<Detalle_Pedido> detallePedidos = registroPedidoDTO.items().stream()
                     .map(dp-> {
@@ -65,13 +63,16 @@ public class PedidoServiceImpl implements IPedidoService {
                         return detallePedido;
                     }).toList();
 
+        nuevoPedido.setTotal_Pedido(
+                detallePedidos.stream()
+                        .map(Detalle_Pedido::getSub_Total)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add)
+        );
+
             nuevoPedido.hacerAdopcionPedido(detallePedidos);
+            nuevoPedido = pedidoRepository.save(nuevoPedido);
             detallePedidoRepository.saveAll(detallePedidos);
-            nuevoPedido.setTotal_Pedido(
-                    detallePedidos.stream()
-                            .map(Detalle_Pedido::getSub_Total)
-                            .reduce(BigDecimal.ZERO, BigDecimal::add)
-            );
+
 
         Pago pago = new Pago();
         pago.setPago_Id(generarUUID());
@@ -80,7 +81,10 @@ public class PedidoServiceImpl implements IPedidoService {
         pago.setFecha_Pago(LocalDateTime.now());
         pago.setTransaccion_Id(generarTransactionIds(100));
 
-        return nuevoPedido;
+        pagoRepository.save(pago);
+
+
+        return pedidoRepository.detallarPedido(nuevoPedido.getPedidoId());
     }
 
 

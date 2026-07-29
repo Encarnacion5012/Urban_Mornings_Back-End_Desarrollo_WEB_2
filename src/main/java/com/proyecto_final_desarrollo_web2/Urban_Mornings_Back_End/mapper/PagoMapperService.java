@@ -10,12 +10,12 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PagoMapperService {
 
-    @Mapping(target = "pedido.pedido_Id", source = "pedido_id")
+    @Mapping(target = "pedido.pedidoId", source = "pedido_id")
     @Mapping(target = "pago_Id", ignore = true)
     @Mapping(target = "fecha_Pago", ignore = true)
     Pago registroDTOToEntity(RegistroPagoDTO dto);
 
-    @Mapping(target = "pedido_id", source = "pedido.pedido_Id")
+    @Mapping(target = "pedido_id", source = "pedido.pedidoId")
     ResponsePagoDTO entityToResponseDTO(Pago pago);
 
 }

@@ -10,13 +10,14 @@ import org.mapstruct.Mapping;
 public interface PedidoMapperService {
 
     @Mapping(target = "cliente.clienteId", source = "cliente_Id")
-    @Mapping(target = "pedido_Id", ignore = true)
+    @Mapping(target = "pedidoId", ignore = true)
     @Mapping(target = "fecha_Hora_Retiro", expression = "java(dto.pickupDate().atTime(dto.pickupTime()))" )
     @Mapping(target = "codigoRetiro", ignore = true)
     @Mapping(target = "estado_Actual", constant = "PENDIENTE")
     @Mapping(target = "total_Pedido", ignore = true)
     @Mapping(target = "fecha_Creacion", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "detallesPedido", ignore = true)
+    @Mapping(target = "dedicatoria", source = "dto.dedication")
     Pedido registroDTOToEntity(RegistroPedidoDTO dto);
 
     ResponsePedidoDTO entityToResponseDTO(Pedido pedido);

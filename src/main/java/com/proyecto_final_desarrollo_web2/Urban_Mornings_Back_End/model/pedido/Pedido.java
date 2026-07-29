@@ -23,7 +23,8 @@ import java.util.UUID;
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID pedido_Id;
+    @Column(name = "pedido_Id")
+    private UUID pedidoId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_Id")
@@ -43,6 +44,8 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Detalle_Pedido> detallesPedido = new ArrayList<>();
+
+    private String dedicatoria;
 
 
     //Metodo para hacer la aptopcion de detalles
