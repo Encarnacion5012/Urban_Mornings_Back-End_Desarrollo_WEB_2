@@ -23,12 +23,12 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
     boolean existsByClienteId(UUID clienteId);
 
     // Agregamos las anotaciones obligatorias y cambiamos Cliente por void
-    @Modifying
+
     @Transactional
     @Query(value = """
         EXEC  csp_RegistroCLientes :id, :cedula, :nombre_Completo, :correo, :telefono, :clave, :rol, :imagen_url, :fecha_Registro
     """, nativeQuery = true)
-    void registrarCLiente (
+    Cliente registrarCLiente (
             @Param("id") UUID id,
             @Param("cedula") String cedula,
             @Param("nombre_Completo") String nombre_Completo,

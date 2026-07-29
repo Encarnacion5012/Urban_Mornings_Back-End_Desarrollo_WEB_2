@@ -37,19 +37,19 @@ public class ClienteServiceImpl implements IClientesService {
         cliente.setClave(passwordEncoder.encode(cliente.getClave()));
 
         // Ejecutamos el guardado
-        clienteRepository.registrarCLiente(
+        return clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
                 cliente.getCedula(),
                 cliente.getNombre_Completo(),
                 cliente.getCorreo(),
                 cliente.getTelefono(),
                 cliente.getClave(),
-                "USER", // Asignamos el rol manualmente para evitar el NullPointerException
+                cliente.getRol().name(), // Asignamos el rol manualmente para evitar el NullPointerException
                 cliente.getImagen_url(),
                 cliente.getFecha_Registro()
         );
 
-        return cliente;
+
     }
 
     @Override
