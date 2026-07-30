@@ -17,14 +17,12 @@ public class AuthenticationService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String correo) throws UsernameNotFoundException {
-
-
-//Tenemos dos tabalas para autenticar, usuraios y clientes, primero buscamos en una
-// y si no esta vamos a otra y si no esta finalmente lanzamos una exepcion
-//Recordar que para esto en el repository implemtamos optional en ambos userDatils
-   return usuarioRepository.findByCorreo(correo)
-           .orElseGet(()-> clienteRepository.findByCorreo(correo)
+        
+        System.out.println("Intentando loguear con el correo: " + correo);
+        
+        return usuarioRepository.findByCorreo(correo)
+                .orElseGet(() -> clienteRepository.findByCorreo(correo)
                         .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado"))
-           );
-}
+                );
+    }
 }

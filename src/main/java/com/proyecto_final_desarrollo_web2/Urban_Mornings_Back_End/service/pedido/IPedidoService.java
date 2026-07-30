@@ -9,5 +9,11 @@ import java.util.UUID;
 
 public interface IPedidoService {
     PedidoResponseProjection registroPedido(RegistroPedidoDTO registroPedidoDTO);
+
     public List<PedidoResponseProjection> listarPedidosPorcliente(UUID id_cliente);
+
+    Pedido actualizarPedido(UUID id, RegistroPedidoDTO registroPedidoDTO);
+
+    void eliminarPedido(UUID id);
+
 }

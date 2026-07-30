@@ -52,7 +52,7 @@ public class Usuario implements UserDetails, IAppUser {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(rol.name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
     }
 
     @Override
@@ -63,5 +63,25 @@ public class Usuario implements UserDetails, IAppUser {
     @Override
     public UUID getUserId() {
         return this.getIdUsuario();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.activo; // Vinculamos tu campo 'activo' de la base de datos
     }
 }

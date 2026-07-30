@@ -31,26 +31,6 @@ public class TokenService {
 
         IAppUser userDates = (IAppUser) user;
 
-//        String username ="";
-//        String imagenUrl = "";
-//        UUID id_subject = null;
-//
-//        if (user instanceof Usuario) {
-//           Usuario usuario = (Usuario) user;
-//            username=usuario.getNombre_Completo();
-//            id_subject = usuario.getId_usuario();
-//            imagenUrl = usuario.getImagen_url();
-//        }
-//
-//        if (user instanceof Cliente) {
-//            Cliente cliente = (Cliente) user;
-//            username = cliente.getNombre_Completo();
-//            id_subject =cliente.getCliente_Id();
-//            imagenUrl = cliente.getImagen_url();
-//
-//        }
-
-
         List<String> roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
