@@ -51,6 +51,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     where pe.cliente.clienteId =:id_cliente
 """)
     List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente")  UUID id_cliente);
+
+//    void cambiarEstadopedido(); //implemntar
 }
 
 
