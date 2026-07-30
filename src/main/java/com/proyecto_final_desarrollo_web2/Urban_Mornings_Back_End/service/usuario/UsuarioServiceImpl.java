@@ -2,13 +2,17 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuar
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,8 +21,8 @@ import java.util.UUID;
 public class UsuarioServiceImpl implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioMapperService usuarioMapperService;
-
+    private final UsuarioMapperService usuarioMapper;
+    private final PasswordEncoder passwordEncoder; // Se inyecta para encriptar claves
 
     @Transactional
     @Override
@@ -27,7 +31,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         usuario.setIdUsuario(generar_UUid_Usuario());
 
-       return usuarioRepository.registarUsuario(
+        return usuarioRepository.registarUsuario(
                 usuario.getIdUsuario(),
                 usuario.getCedula(),
                 usuario.getNombre_Completo(),
@@ -36,16 +40,16 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 usuario.getClave(),
                 usuario.getRol().name(),
                 usuario.getImagen_url(),
-                usuario.isActivo()
-        );
+                usuario.isActivo());
 
 
 
     }
 
-
     public List<ResponseUsuarioProjection> listarUsuarios() {
         return usuarioRepository.listarUsuarios();
+
+
     }
 
     private UUID generar_UUid_Usuario() {
@@ -58,13 +62,40 @@ public class UsuarioServiceImpl implements IUsuarioService {
             return uuid_Generado;
         }
 
+}
+
+
+
+    @Override
+    @Transactional
+    public void eliminarUsuario(UUID id_usuario) {
+
+        Usuario usuarioExistente = usuarioRepository.findById(id_usuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el ID: " + id_usuario));
+
+        usuarioRepository.eliminarUsuario(usuarioExistente.getIdUsuario());
     }
 
+    @Override
+    @Transactional
+    public Usuario actualizarUsuario(UUID id_usuario, RegistroUsuarioDTO dto) {
 
+        Usuario usuarioExistente = usuarioRepository.findById(id_usuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el ID: " + id_usuario));
 
+        Usuario datosNuevos = usuarioMapper.registroDTOToEntity(dto);
 
+        // Encriptar la nueva clave al actualizar
+        String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
 
-
-
-
+        usuarioRepository.actualizarUsuario(
+                usuarioExistente.getIdUsuario(),
+                datosNuevos.getCedula(),
+                datosNuevos.getNombre_Completo(),
+                datosNuevos.getCorreo(),
+                datosNuevos.getTelefono(),
+                claveEncriptada, // Actualizar con clave encriptada
+                datosNuevos.getRol().name(),
+                datosNuevos.getImagen_url(),
+                datosNuevos.isActivo());
 }

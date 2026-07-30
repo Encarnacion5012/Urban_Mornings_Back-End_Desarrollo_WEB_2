@@ -10,4 +10,13 @@ import java.util.UUID;
 public interface IUsuarioService {
     public ResponseUsuarioProjection registroUsuario(RegistroUsuarioDTO dto);
     public List<ResponseUsuarioProjection> listarUsuarios();
+    Usuario actualizarUsuario(UUID id_usuario, RegistroUsuarioDTO dto);
+
+    void eliminarUsuario(UUID id_usuario);
+}
+
+
+
+
+
 }

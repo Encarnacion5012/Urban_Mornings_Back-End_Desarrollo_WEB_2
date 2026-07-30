@@ -1,0 +1,5 @@
+CREATE PROCEDURE csp_ListarPedidos
+AS
+BEGIN
+    SELECT * FROM Pedido;
+END;

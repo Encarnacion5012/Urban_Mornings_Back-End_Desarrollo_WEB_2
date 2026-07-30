@@ -123,4 +123,38 @@ public class PedidoServiceImpl implements IPedidoService {
 
          return stringBuilder.toString();
     }
+
+    @Override
+    @Transactional
+    public void eliminarPedido(UUID id) {
+
+        Pedido pedidoExistente = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con el ID: " + id));
+
+        pedidoRepository.eliminarPedido(pedidoExistente.getPedidoId());
+    }
+
+    @Override
+    @Transactional
+    public Pedido actualizarPedido(UUID id, RegistroPedidoDTO registroPedidoDTO) {
+
+        Pedido pedidoExistente = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido no encontrado con el ID: " + id));
+
+        Pedido datosNuevos = mapperService.registroDTOToEntity(registroPedidoDTO);
+
+        // Llamamos a tu consulta SQL nativa en lugar de usar .save()
+        pedidoRepository.actualizarPedido(
+                pedidoExistente.getPedidoId(),
+                datosNuevos.getCliente().getClienteId(),
+                datosNuevos.getFecha_Hora_Retiro(),
+                datosNuevos.getCodigoRetiro(),
+                datosNuevos.getEstado_Actual().name(), // .name() porque es Enum
+                datosNuevos.getTotal_Pedido(),
+                pedidoExistente.getFecha_Creacion() // Mantenemos la fecha original
+        );
+
+        return pedidoRepository.findById(id).orElse(null);
+    }
+
 }

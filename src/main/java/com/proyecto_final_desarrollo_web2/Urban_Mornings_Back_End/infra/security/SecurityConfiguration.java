@@ -32,7 +32,6 @@ public class SecurityConfiguration {
 
     private final JwtDecoder jwtDecoder;
 
-
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
@@ -40,20 +39,18 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         // Permitimos el metodo post sin autenticacion en el login
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register/clientes").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/clientes/todos").permitAll() // remember to change it is just for a test
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/clientes/todos").permitAll() // remember to change it is just
+                                                                                        // for a test
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
 
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder)
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
-                        )
-                        .authenticationEntryPoint(customAuthenticacionEntryPoint())
-                )
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(customAuthenticacionEntryPoint()))
                 .build();
     }
 
@@ -62,8 +59,9 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
+    // Método corregido para evitar el StackOverflow (bucle infinito)
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -78,18 +76,12 @@ public class SecurityConfiguration {
         return jwtAuthenticationConverter;
     }
 
-
-
     @Bean
-    public AuthenticationEntryPoint customAuthenticacionEntryPoint(){
+    public AuthenticationEntryPoint customAuthenticacionEntryPoint() {
         return (request, response, authException) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"No autorizado. El token es inválido o ha expirado.\"}");
         };
     }
-
-
-
-
 }

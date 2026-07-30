@@ -36,3 +36,20 @@ ResponseEntity<PedidoResponseProjection> registrarPedido(@RequestBody @Valid Reg
 }
 
 }
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<ResponsePedidoDTO> actualizarPedido(@PathVariable UUID id, @RequestBody RegistroPedidoDTO registroDto) {
+
+        Pedido pedidoActualizado = pedidoService.actualizarPedido(id, registroDto);
+
+        return ResponseEntity.ok(pedidoMapperService.entityToResponseDTO(pedidoActualizado));
+    }
+
+    @DeleteMapping("/eliminar/{id}")
+    public ResponseEntity<Void> eliminarPedido(@PathVariable UUID id) {
+
+        pedidoService.eliminarPedido(id);
+
+        return ResponseEntity.noContent().build();
+    }
+}
