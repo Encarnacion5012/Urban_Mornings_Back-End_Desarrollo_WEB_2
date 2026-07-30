@@ -5,8 +5,10 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.LoginDTO;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
+    import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
+    import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenJWTDTO;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenService;
     import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
@@ -70,9 +72,9 @@ public class AuthenticationController {
     public ResponseEntity<ResponseUsuarioProjection> registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
         ResponseUsuarioProjection usuario = usuarioService.registroUsuario(registroDto);
 
-        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getIdUsuario()).toUri();
+        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getId_usuario()).toUri();
 
-        return ResponseEntity.created(uri).body(usuarioMapperService.entityToResponseDto(usuario));
+        return ResponseEntity.created(uri).body(usuario);
 
     }
 

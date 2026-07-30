@@ -12,9 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -31,18 +29,18 @@ public class ClientesController {
     @GetMapping("/todos")
     public ResponseEntity<List<ResponseClienteProjection>> listarClientes(){
 
-        List<ResponseClienteProjection> clientes = clienteRepository.listarClientes();
+        List<ResponseClienteProjection> clientes = clientesService.listarTodos();
 
         return ResponseEntity.ok(clientes);
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<ResponseClienteDTO> registrarCliente(@RequestBody RegistroClienteDTO registroDto) {
+    public ResponseEntity<ResponseClienteProjection> registrarCliente(@RequestBody RegistroClienteDTO registroDto) {
 
-        Cliente clienteCreado = clientesService.registroClientes(registroDto);
+        ResponseClienteProjection clienteCreado = clientesService.registroClientes(registroDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(clienteMapperService.entityToResponseDto(clienteCreado));
+                .body(clienteCreado);
     }
 
     @PutMapping("/actualizar/{id}")

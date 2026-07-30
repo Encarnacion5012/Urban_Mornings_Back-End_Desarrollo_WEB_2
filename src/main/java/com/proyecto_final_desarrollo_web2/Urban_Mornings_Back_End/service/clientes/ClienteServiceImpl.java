@@ -24,7 +24,7 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public Cliente registroClientes(RegistroClienteDTO registroDto){
+    public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto){
 
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
@@ -50,7 +50,7 @@ public class ClienteServiceImpl implements IClientesService {
 
 
     @Override
-    public List<ResponseClienteProjection> listarClientesProcedue(){
+    public List<ResponseClienteProjection> listarTodos() {
         return clienteRepository.listarClientes();
     }
 

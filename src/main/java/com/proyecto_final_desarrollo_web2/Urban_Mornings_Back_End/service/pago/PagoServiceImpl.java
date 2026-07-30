@@ -36,7 +36,7 @@ public class PagoServiceImpl implements IPagoService {
         pagoRepository.registrarPagoSP(
                 pago.getPago_Id(),
                 pago.getMonto_Pagado(),
-                pago.getPedido().getPedido_Id(), 
+                pago.getPedido().getPedidoId(),
                 pago.getMetodo_Pago().name(),
                 pago.getTransaccion_Id(),
                 pago.getFecha_Pago()
@@ -63,7 +63,7 @@ public class PagoServiceImpl implements IPagoService {
         pagoRepository.actualizarPago(
                 pagoExistente.getPago_Id(),
                 datosNuevos.getMonto_Pagado(),
-                datosNuevos.getPedido().getPedido_Id(),
+                datosNuevos.getPedido().getPedidoId(),
                 datosNuevos.getMetodo_Pago().name(), // .name() porque es un Enum
                 datosNuevos.getTransaccion_Id(),
                 datosNuevos.getFecha_Pago() != null ? datosNuevos.getFecha_Pago() : pagoExistente.getFecha_Pago()

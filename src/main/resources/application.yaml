@@ -3,7 +3,7 @@ spring:
     name: proyecto-final-desarrollo-web2
 
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=Urban_Mornings_YanselP;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1433;databaseName=Urban_Mornings;encrypt=true;trustServerCertificate=true
     username: sa
     password: Estuden1!
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver

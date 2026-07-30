@@ -1,8 +1,12 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.ResponseCatalogoProjection;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -13,8 +17,9 @@ public interface CatalogoRepository extends JpaRepository<Catalogo, Integer> {
     List<Catalogo> findAllByActivoTrue();
 
 
+    @Transactional
     @Query(value = "EXEC casp_RegistroCatalogo :nombre, :descripcion, :precio, :tipo, :categoria_Desayuno,:imagen_url,:activo", nativeQuery = true)
-    Catalogo registrarCatalogo(
+    ResponseCatalogoProjection registrarCatalogo(
             @Param("nombre") String nombre,
             @Param("descripcion") String descripcion,
             @Param("precio") BigDecimal precio,

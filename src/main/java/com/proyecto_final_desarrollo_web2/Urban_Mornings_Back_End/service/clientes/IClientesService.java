@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface IClientesService {
     public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto);
-    public List<ResponseClienteProjection> listarClientesProcedue();
+
 
     public List<ResponseClienteProjection>  listarTodos();
 

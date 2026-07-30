@@ -23,13 +23,13 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
         
         Detalle_Pedido detalle = mapperService.registroDTOToEntity(detallePedidoDTO);
         
-        if (detalle.getDetalle_Id() == null) {
-            detalle.setDetalle_Id(UUID.randomUUID());
+        if (detalle.getDetalleId() == null) {
+            detalle.setDetalleId(UUID.randomUUID());
         }
 
         detallePedidoRepository.registrarDetallePedido(
-                detalle.getDetalle_Id(),
-                detalle.getPedido().getPedido_Id(),
+                detalle.getDetalleId(),
+                detalle.getPedido().getPedidoId(),
                 detalle.getCatalogo().getCatalogo_id(),
                 detalle.getCantidad(),
                 detalle.getPrecio_Unitario(),
@@ -55,8 +55,8 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
         Detalle_Pedido datosNuevos = mapperService.registroDTOToEntity(detallePedidoDTO);
 
         detallePedidoRepository.actualizarDetallePedido(
-                detalleExistente.getDetalle_Id(),
-                datosNuevos.getPedido().getPedido_Id(),
+                detalleExistente.getDetalleId(),
+                datosNuevos.getPedido().getPedidoId(),
                 datosNuevos.getCatalogo().getCatalogo_id(),
                 datosNuevos.getCantidad(),
                 datosNuevos.getPrecio_Unitario(),
@@ -73,6 +73,6 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
         Detalle_Pedido detalleExistente = detallePedidoRepository.findById(detalleId)
                 .orElseThrow(() -> new RuntimeException("Detalle no encontrado con el ID: " + detalleId));
 
-        detallePedidoRepository.eliminarDetallePedido(detalleExistente.getDetalle_Id());
+        detallePedidoRepository.eliminarDetallePedido(detalleExistente.getDetalleId());
     }
 }
