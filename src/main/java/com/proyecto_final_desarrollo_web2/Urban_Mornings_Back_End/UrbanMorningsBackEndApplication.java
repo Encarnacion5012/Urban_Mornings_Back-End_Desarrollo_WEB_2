@@ -13,11 +13,6 @@ public class UrbanMorningsBackEndApplication {
 		SpringApplication.run(UrbanMorningsBackEndApplication.class, args);
 	}
 
-		@Bean
-		CommandLineRunner initData(PasswordEncoder encoder) {
-			return args -> {
-				System.out.println("HASH VÁLIDO: " + encoder.encode("admin"));
-			};
-		}
+
 	}
 
