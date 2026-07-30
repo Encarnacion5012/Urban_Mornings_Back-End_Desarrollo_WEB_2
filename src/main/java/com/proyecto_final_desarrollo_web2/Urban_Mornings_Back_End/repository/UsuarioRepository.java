@@ -35,7 +35,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
         :imagen_url,
         :activo
 """, nativeQuery = true)
-    Usuario registarUsuario(
+    ResponseUsuarioProjection registarUsuario(
            @Param("id_usuario") UUID id_usuario,
            @Param("cedula") String cedula,
            @Param("nombre_Completo") String nombre_Completo,
@@ -56,7 +56,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE usuario SET cedula = :cedula, nombre_Completo = :nombre_Completo, correo = :correo, telefono = :telefono, clave = :clave, rol = :rol, imagen_url = :imagen_url, activo = :activo WHERE id_usuario = :id_usuario", nativeQuery = true)
+    @Query(value = "UPDATE usuarios SET cedula = :cedula, nombre_Completo = :nombre_Completo, correo = :correo, telefono = :telefono, clave = :clave, rol = :rol, imagen_url = :imagen_url, activo = :activo WHERE id_usuario = :id_usuario", nativeQuery = true)
     void actualizarUsuario(
             @Param("id_usuario") UUID id_usuario,
             @Param("cedula") String cedula,
@@ -71,6 +71,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM usuario WHERE id_usuario = :id_usuario", nativeQuery = true)
+    @Query(value = "DELETE FROM usuarios WHERE id_usuario = :id_usuario", nativeQuery = true)
     void eliminarUsuario(@Param("id_usuario") UUID id_usuario);
 }

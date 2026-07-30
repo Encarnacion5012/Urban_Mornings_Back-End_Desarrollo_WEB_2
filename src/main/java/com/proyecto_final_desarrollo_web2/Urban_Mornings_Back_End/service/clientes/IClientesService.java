@@ -10,7 +10,7 @@ public interface IClientesService {
     public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto);
     public List<ResponseClienteProjection> listarClientesProcedue();
 
-    public List<Cliente> listarTodos();
+    public List<ResponseClienteProjection>  listarTodos();
 
     public Cliente actualizarCliente(UUID id, RegistroClienteDTO registroDto);
 

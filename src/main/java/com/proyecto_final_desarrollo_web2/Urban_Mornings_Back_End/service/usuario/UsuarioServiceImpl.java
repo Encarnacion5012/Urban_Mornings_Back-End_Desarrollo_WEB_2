@@ -23,11 +23,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapperService usuarioMapper;
     private final PasswordEncoder passwordEncoder; // Se inyecta para encriptar claves
+    private final UsuarioMapperService usuarioMapperService;
 
     @Transactional
     @Override
     public ResponseUsuarioProjection registroUsuario(RegistroUsuarioDTO dto) {
-        Usuario usuario = usuarioMapperService.registroDtoToEntity(dto);
+        Usuario usuario = usuarioMapperService.registroDTOToEntity(dto);
 
         usuario.setIdUsuario(generar_UUid_Usuario());
 
@@ -98,4 +99,6 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 datosNuevos.getRol().name(),
                 datosNuevos.getImagen_url(),
                 datosNuevos.isActivo());
+        return datosNuevos;
+    }
 }

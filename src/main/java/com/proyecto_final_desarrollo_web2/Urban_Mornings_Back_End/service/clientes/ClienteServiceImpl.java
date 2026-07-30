@@ -49,6 +49,7 @@ public class ClienteServiceImpl implements IClientesService {
     }
 
 
+    @Override
     public List<ResponseClienteProjection> listarClientesProcedue(){
         return clienteRepository.listarClientes();
     }

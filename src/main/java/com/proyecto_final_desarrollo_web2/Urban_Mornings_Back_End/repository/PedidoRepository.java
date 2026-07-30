@@ -57,7 +57,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE pedidos SET cliente_id = :cliente_Id, fecha_hora_retiro = :fecha_Hora_Retiro, codigo_retiro = :codigo_Retiro, estado_actual = :estado_Actual, total_pedido = :total_Pedido, fecha_creacion = :fecha_Creacion WHERE pedido_id = :pedido_Id", nativeQuery = true)
+    @Query(value = "UPDATE pedidos SET clienteid = :cliente_Id, fecha_hora_retiro = :fecha_Hora_Retiro, codigo_retiro = :codigo_Retiro, estado_actual = :estado_Actual, total_pedido = :total_Pedido, fecha_creacion = :fecha_Creacion WHERE pedido_id = :pedido_Id", nativeQuery = true)
     void actualizarPedido(
             @Param("pedido_Id") UUID pedido_Id,
             @Param("cliente_Id") UUID cliente_Id,

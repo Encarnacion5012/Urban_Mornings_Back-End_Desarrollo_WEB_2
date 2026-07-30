@@ -3,6 +3,10 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.RegistroPedidoDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.ResponsePedidoDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoMapperServiceImpl;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.PedidoRepository;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedido.IPedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +23,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PedidoController {
     private final IPedidoService pedidoService;
+    private final PedidoMapperServiceImpl pedidoMapperService;
 
 
 @PostMapping("/registrar")
@@ -35,7 +40,7 @@ ResponseEntity<PedidoResponseProjection> registrarPedido(@RequestBody @Valid Reg
     return ResponseEntity.ok().body(pedidos);
 }
 
-}
+
 
     @PutMapping("/actualizar/{id}")
     public ResponseEntity<ResponsePedidoDTO> actualizarPedido(@PathVariable UUID id, @RequestBody RegistroPedidoDTO registroDto) {
