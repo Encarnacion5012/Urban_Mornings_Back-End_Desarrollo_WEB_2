@@ -1,6 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.exeption.exeptions.EmailAlreadyExistExeption;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
@@ -25,7 +26,7 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public Cliente registroClientes(RegistroClienteDTO registroDto) {
+    public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto) {
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
 
@@ -33,13 +34,11 @@ public class ClienteServiceImpl implements IClientesService {
             throw new EmailAlreadyExistExeption("Este correo ya está registrado");
         }
 
-        // 1. Preparamos todos los datos del objeto Java primero para no devolver nulos
         cliente.setClienteId(generarClienteId());
         cliente.setClave(passwordEncoder.encode(cliente.getClave()));
-        cliente.setRol(Cliente_Usuario_Roles.CLIENTE); // Asignamos el enum al objeto
-        cliente.setFecha_Registro(LocalDateTime.now()); // Generamos la fecha actual
+        cliente.setRol(Cliente_Usuario_Roles.CLIENTE);
+        cliente.setFecha_Registro(LocalDateTime.now());
 
-        // 2. Ejecutamos el guardado en la BD con los datos del objeto ya completo
         clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
                 cliente.getCedula(),
@@ -47,16 +46,18 @@ public class ClienteServiceImpl implements IClientesService {
                 cliente.getCorreo(),
                 cliente.getTelefono(),
                 cliente.getClave(),
-                cliente.getRol().name(), // Extraemos el texto "USER"
+                cliente.getRol().name(),
                 cliente.getImagen_url(),
                 cliente.getFecha_Registro());
 
-        return cliente;
+        // Buscamos el cliente guardado y lo devolvemos como proyección (ya no da error)
+        return clienteRepository.buscarProyeccionPorId(cliente.getClienteId());
     }
 
     @Override
     @Transactional
-    public List<Cliente> listarTodos() {
+    public List<ResponseClienteProjection> listarTodos() {
+        // Devuelve la lista directa desde el SP, mapeada a proyecciones
         return clienteRepository.listarClientes();
     }
 
@@ -68,8 +69,6 @@ public class ClienteServiceImpl implements IClientesService {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
 
         Cliente datosNuevos = clienteMapper.registerDtoTOEntity(registroDto);
-
-        // También encriptamos si actualizan la clave
         String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
 
         clienteRepository.actualizarCliente(
@@ -79,7 +78,7 @@ public class ClienteServiceImpl implements IClientesService {
                 datosNuevos.getCorreo(),
                 datosNuevos.getTelefono(),
                 claveEncriptada,
-                Cliente_Usuario_Roles.CLIENTE.name(), // Mantenemos el rol
+                Cliente_Usuario_Roles.CLIENTE.name(),
                 datosNuevos.getImagen_url());
 
         return clienteRepository.findById(id).orElse(null);
@@ -88,7 +87,6 @@ public class ClienteServiceImpl implements IClientesService {
     @Override
     @Transactional
     public void eliminarCliente(UUID id) {
-
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
 
@@ -96,10 +94,7 @@ public class ClienteServiceImpl implements IClientesService {
     }
 
     private UUID generarClienteId() {
-
         UUID id_generado = UUID.randomUUID();
-
-        // Usamos el método existsById que provee JpaRepository por defecto
         if (clienteRepository.existsById(id_generado)) {
             return generarClienteId();
         } else {

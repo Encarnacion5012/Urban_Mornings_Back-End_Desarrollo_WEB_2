@@ -1,6 +1,5 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;

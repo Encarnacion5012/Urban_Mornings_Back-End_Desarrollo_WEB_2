@@ -2,17 +2,14 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuar
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,14 +20,20 @@ public class UsuarioServiceImpl implements IUsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioMapperService usuarioMapper;
     private final PasswordEncoder passwordEncoder; // Se inyecta para encriptar claves
-    private final UsuarioMapperService usuarioMapperService;
 
     @Transactional
     @Override
     public ResponseUsuarioProjection registroUsuario(RegistroUsuarioDTO dto) {
-        Usuario usuario = usuarioMapperService.registroDTOToEntity(dto);
+        Usuario usuario = usuarioMapper.registroDTOToEntity(dto);
 
         usuario.setIdUsuario(generar_UUid_Usuario());
+
+        // 1. Encriptamos la clave plana que llegó del DTO
+        String claveEncriptada = passwordEncoder.encode(usuario.getClave());
+        usuario.setClave(claveEncriptada);
+
+        // 2. Activamos la cuenta para que Spring Security lo deje entrar
+        usuario.setActivo(true);
 
         return usuarioRepository.registarUsuario(
                 usuario.getIdUsuario(),
@@ -38,19 +41,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 usuario.getNombre_Completo(),
                 usuario.getCorreo(),
                 usuario.getTelefono(),
-                usuario.getClave(),
+                usuario.getClave(), // ¡Ahora sí pasará el hash de Bcrypt!
                 usuario.getRol().name(),
                 usuario.getImagen_url(),
-                usuario.isActivo());
-
-
-
+                usuario.isActivo()); // ¡Ahora sí pasará como true (1)!
     }
 
     public List<ResponseUsuarioProjection> listarUsuarios() {
         return usuarioRepository.listarUsuarios();
-
-
     }
 
     private UUID generar_UUid_Usuario() {
@@ -58,14 +56,10 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
         if (usuarioRepository.existsByIdUsuario(uuid_Generado)) {
             return generar_UUid_Usuario();
-        }
-        else {
+        } else {
             return uuid_Generado;
         }
-
-}
-
-
+    }
 
     @Override
     @Transactional
@@ -99,6 +93,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
                 datosNuevos.getRol().name(),
                 datosNuevos.getImagen_url(),
                 datosNuevos.isActivo());
+                
         return datosNuevos;
     }
 }

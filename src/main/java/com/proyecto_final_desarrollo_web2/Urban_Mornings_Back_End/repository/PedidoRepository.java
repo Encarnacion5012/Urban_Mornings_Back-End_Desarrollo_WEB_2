@@ -1,7 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -32,28 +31,25 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
 
     boolean existsByCodigoRetiro(Long codigo_Retiro);
 
-
     @Query(value = """
-        SELECT pa 
-        FROM Pago pa 
-        JOIN FETCH pa.pedido pe 
-        LEFT JOIN FETCH pe.detallesPedido dp 
-        LEFT JOIN FETCH dp.catalogo 
-        WHERE pe.pedidoId = :id_pedido       
-    """)
+                SELECT pa
+                FROM Pago pa
+                JOIN FETCH pa.pedido pe
+                LEFT JOIN FETCH pe.detallesPedido dp
+                LEFT JOIN FETCH dp.catalogo
+                WHERE pe.pedidoId = :id_pedido
+            """)
     Optional<PedidoResponseProjection> detallarPedido(@Param("id_pedido") UUID id_pedido);
 
-
     @Query(value = """
-    SELECT DISTINCT pa FROM Pago pa
-    JOIN FETCH pa.pedido pe
-    LEFT JOIN FETCH pe.detallesPedido dp
-    LEFT JOIN FETCH dp.catalogo ca
-    
-    where pe.cliente.clienteId =:id_cliente
-""")
-    List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente")  UUID id_cliente);
+                SELECT DISTINCT pa FROM Pago pa
+                JOIN FETCH pa.pedido pe
+                LEFT JOIN FETCH pe.detallesPedido dp
+                LEFT JOIN FETCH dp.catalogo ca
 
+                where pe.cliente.clienteId =:id_cliente
+            """)
+    List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente") UUID id_cliente);
 
     @Modifying
     @Transactional
@@ -72,5 +68,10 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     @Query(value = "EXEC csp_EliminarPedido :pedido_Id", nativeQuery = true)
     void eliminarPedido(@Param("pedido_Id") UUID pedido_Id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE pedidos SET estado_actual = :estado WHERE pedido_id = :id", nativeQuery = true)
+    void actualizarEstadoPedido(@Param("id") UUID id, @Param("estado") String estado);
+    
 
 }

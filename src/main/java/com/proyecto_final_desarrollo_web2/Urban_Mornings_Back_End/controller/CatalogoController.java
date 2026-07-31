@@ -32,7 +32,7 @@ public class CatalogoController {
     }
 
 
-    @GetMapping("/listar")
+    @GetMapping("/todos")
     public ResponseEntity<List<ResponseCatalogoProjection>> listarCatalogos(){
         List<ResponseCatalogoProjection> catalogos = catalogoService.listarTodos();
 

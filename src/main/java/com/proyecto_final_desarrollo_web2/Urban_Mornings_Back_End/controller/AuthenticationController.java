@@ -3,15 +3,9 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 import com.nimbusds.jose.JOSEException;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.LoginDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenJWTDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.tokenJWT.TokenService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes.IClientesService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario.IUsuarioService;
 import jakarta.validation.Valid;
@@ -40,13 +34,10 @@ public class AuthenticationController {
     private final AuthenticationManager auManager;
     private final TokenService tokenService;
     private final IClientesService clienteService;
-    private final ClienteMapperService clienteMapperService;
-    private final UsuarioMapperService usuarioMapperService;
     private final IUsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity<TokenJWTDTO> login(@RequestBody @Valid LoginDTO loginDTO) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, JOSEException {
-        // La clave plana se pasa directamente, Spring Security se encarga del resto
         var authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO.email(), loginDTO.clave());
         var authentication = auManager.authenticate(authenticationToken);
 
@@ -57,17 +48,21 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register/clientes")
-    public ResponseEntity<ResponseClienteDTO> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        Cliente cliente = clienteService.registroClientes(registroDto);
-        URI Uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getClienteId()).toUri();
-        return ResponseEntity.created(Uri).body(clienteMapperService.entityToResponseDto(cliente));
+    public ResponseEntity<?> registroUsuarios(@RequestBody @Valid RegistroClienteDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        var cliente = clienteService.registroClientes(registroDto);
+        
+        // Aquí ya pusimos el getCliente_Id() correcto de tu Proyección
+        URI uri = uriComponentsBuilder.path("/auth/clientes/{id}").buildAndExpand(cliente.getCliente_Id()).toUri();
+        return ResponseEntity.created(uri).body(cliente);
     }
 
     @PostMapping("/register/usuarios")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseUsuarioDto> registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
-        Usuario usuario = usuarioService.registroUsuario(registroDto);
-        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getIdUsuario()).toUri();
-        return ResponseEntity.created(uri).body(usuarioMapperService.entityToResponseDto(usuario));
+     @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> registarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriComponentsBuilder) {
+        var usuario = usuarioService.registroUsuario(registroDto);
+        
+        // Ojo aquí: puse getId_usuario() asumiendo que así se llama en tu Proyección.
+        URI uri = uriComponentsBuilder.path("/auth/usuarios/{id}").buildAndExpand(usuario.getId_usuario()).toUri();
+        return ResponseEntity.created(uri).body(usuario);
     }
 }
