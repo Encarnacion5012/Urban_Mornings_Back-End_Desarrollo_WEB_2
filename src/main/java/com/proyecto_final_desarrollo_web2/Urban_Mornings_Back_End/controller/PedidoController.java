@@ -70,4 +70,10 @@ public class PedidoController {
         pedidoService.validarRetiroPedido(id, dto.codigoRetiro());
         return ResponseEntity.ok("Código válido. Pedido entregado/retirado exitosamente.");
     }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<PedidoResponseProjection>> listarTodosLosPedidos() {
+        List<PedidoResponseProjection> pedidos = pedidoService.listarTodosLosPedidos();
+        return ResponseEntity.ok().body(pedidos);
+    }
 }

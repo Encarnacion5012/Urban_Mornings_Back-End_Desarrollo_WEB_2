@@ -72,6 +72,14 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     @Transactional
     @Query(value = "UPDATE pedidos SET estado_actual = :estado WHERE pedido_id = :id", nativeQuery = true)
     void actualizarEstadoPedido(@Param("id") UUID id, @Param("estado") String estado);
-    
+
+    @Query(value = """
+    SELECT DISTINCT pa FROM Pago pa
+    JOIN FETCH pa.pedido pe
+    LEFT JOIN FETCH pe.detallesPedido dp
+    LEFT JOIN FETCH dp.catalogo ca
+    """)
+    List<PedidoResponseProjection> listarTodosLosPedidos();
+
 
 }
