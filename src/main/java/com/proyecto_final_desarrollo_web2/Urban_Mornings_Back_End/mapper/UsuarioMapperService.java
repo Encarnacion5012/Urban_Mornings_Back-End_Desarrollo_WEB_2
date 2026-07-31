@@ -24,7 +24,7 @@ public abstract class UsuarioMapperService {
     @Mapping(target = "clave", expression = "java(passwordEncoder.encode(usuarioDTO.clave()))")
     public abstract Usuario registroDTOToEntity(RegistroUsuarioDTO usuarioDTO);
 
-    @Mapping(target = "Id_Usuario", source = "usuario.idUsuario")
+    @Mapping(target = "id_Usuario", source = "usuario.idUsuario")
     public abstract ResponseUsuarioDto entityToResponseDto(Usuario usuario);
 
 
