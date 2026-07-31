@@ -17,27 +17,25 @@ import java.util.UUID;
 @Getter
 @Setter
 @EqualsAndHashCode(of = "idUsuario")
-
 @Entity
 @Table(name = "usuarios")
 public class Usuario implements UserDetails, IAppUser {
+
     @Id
     @Column(name = "id_usuario")
     private UUID idUsuario;
 
     private String cedula;
-
     private String nombre_Completo;
     private String correo;
     private String clave;
-
     private String imagen_url;
 
     @Enumerated(EnumType.STRING)
     private Cliente_Usuario_Roles rol;
 
-    private boolean activo;
-
+    // Se inicializa en true para evitar el error 401 por defecto
+    private boolean activo = true;
     private String telefono;
 
     @Override
@@ -82,6 +80,6 @@ public class Usuario implements UserDetails, IAppUser {
 
     @Override
     public boolean isEnabled() {
-        return this.activo; // Vinculamos tu campo 'activo' de la base de datos
+        return this.activo;
     }
 }
