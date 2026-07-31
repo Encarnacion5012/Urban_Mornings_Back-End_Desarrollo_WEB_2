@@ -1,11 +1,13 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ActualizarUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,26 +81,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     @Transactional
-    public Usuario actualizarUsuario(UUID id_usuario, RegistroUsuarioDTO dto) {
+    public Usuario actualizarUsuario(UUID id_usuario, ActualizarUsuarioDTO dto) {
 
         Usuario usuarioExistente = usuarioRepository.findById(id_usuario)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el ID: " + id_usuario));
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con el ID: " + id_usuario));
 
-        Usuario datosNuevos = usuarioMapper.registroDTOToEntity(dto);
+        usuarioMapperService.actualizarUsuarioDesdeDtoActualizacion(dto, usuarioExistente);
 
-        // Encriptar la nueva clave al actualizar
-        String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
 
-        usuarioRepository.actualizarUsuario(
-                usuarioExistente.getIdUsuario(),
-                datosNuevos.getCedula(),
-                datosNuevos.getNombre_Completo(),
-                datosNuevos.getCorreo(),
-                datosNuevos.getTelefono(),
-                claveEncriptada, // Actualizar con clave encriptada
-                datosNuevos.getRol().name(),
-                datosNuevos.getImagen_url(),
-                datosNuevos.isActivo());
-        return datosNuevos;
+        return usuarioExistente;
     }
 }

@@ -1,22 +1,23 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
-
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ActualizarUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.RegistroUsuarioDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioDto;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.usuario.ResponseUsuarioProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.UsuarioMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario.IUsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.usuario.IUsuarioService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,23 +39,37 @@ public class UsuarioController {
 
 
     @PostMapping("/registro")
-    public ResponseEntity<ResponseUsuarioProjection> registrarUsuario(@RequestBody RegistroUsuarioDTO registroDto) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResponseUsuarioProjection> registrarUsuario(@RequestBody @Valid RegistroUsuarioDTO registroDto, UriComponentsBuilder uriBuilder) {
 
         ResponseUsuarioProjection usuarioCreado = usuarioService.registroUsuario(registroDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(usuarioCreado);
+        URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuarioCreado.getId_usuario()).toUri();
+        return ResponseEntity.created(uri).body(usuarioCreado);
     }
 
-    @PutMapping("/actualizar/{id}")
+
+    //Metodo para actualizar otros usuarios reservado para admins
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/actualizar/otros/{id}")
     public ResponseEntity<ResponseUsuarioDto> actualizarUsuario(@PathVariable UUID id,
-                                                                @RequestBody RegistroUsuarioDTO registroDto) {
+                                                                @RequestBody @Valid ActualizarUsuarioDTO registroDto) {
 
         Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, registroDto);
 
         return ResponseEntity.ok(usuarioMapperService.entityToResponseDto(usuarioActualizado));
     }
 
+    //metodo para actualizar profile de usuarios
+
+    @PreAuthorize("hasAnyRole('ADMIN','PERSONAL_COCINA')")
+    @PutMapping("/actualizar/profile/{id}")
+    public ResponseEntity<ResponseUsuarioDto> actualizarProfile(@PathVariable UUID id, @RequestBody @Valid ActualizarUsuarioDTO registroDto) {
+
+        Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, registroDto);
+
+        return ResponseEntity.ok(usuarioMapperService.entityToResponseDto(usuarioActualizado));
+    }
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable UUID id) {
 
