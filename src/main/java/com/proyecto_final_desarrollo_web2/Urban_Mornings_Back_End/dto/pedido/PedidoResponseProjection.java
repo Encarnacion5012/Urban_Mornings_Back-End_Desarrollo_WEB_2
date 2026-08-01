@@ -60,7 +60,7 @@ interface ItemsResponsePedidoProjection {
 
 interface ProductoResponsePedidoProjection {
 
-    @Value("#{target.catalogo_id}") // Asegúrate de que este nombre coincida con tu variable en Catalogo.java
+    @Value("#{target.catalogoId}") // Asegúrate de que este nombre coincida con tu variable en Catalogo.java
     Integer getCatalogo_id();
 
     @Value("#{target.nombre}")
