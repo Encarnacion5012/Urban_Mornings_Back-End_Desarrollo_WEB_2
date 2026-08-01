@@ -57,7 +57,7 @@ public class Cliente implements UserDetails, IAppUser {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
+        return List.of(new SimpleGrantedAuthority(rol.name()));  //no se necesita prefijo "ROLE_" ya este de prefijo en la onfiguracion de seguiridad
     }
 
     // Implementación de los métodos de IAppUser

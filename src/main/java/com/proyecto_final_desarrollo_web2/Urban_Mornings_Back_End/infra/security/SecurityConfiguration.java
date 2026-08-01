@@ -66,7 +66,7 @@ public class SecurityConfiguration {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix(""); //No esta el prfix aqui porquqe esta puesto en las entidades "ROLE_"
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_"); //Pefix esta puesto aqui no es necesario ponerlo en las entidades "ROLE_"
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
