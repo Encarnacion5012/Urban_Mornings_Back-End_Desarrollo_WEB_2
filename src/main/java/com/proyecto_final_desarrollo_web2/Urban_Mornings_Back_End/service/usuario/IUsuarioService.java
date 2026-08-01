@@ -13,7 +13,7 @@ public interface IUsuarioService {
     public List<ResponseUsuarioProjection> listarUsuarios();
     Usuario actualizarUsuario(UUID id_usuario, ActualizarUsuarioDTO dto);
 
-    void eliminarUsuario(UUID id_usuario);
+    Integer eliminarUsuario(UUID id_usuario);
 }
 
 

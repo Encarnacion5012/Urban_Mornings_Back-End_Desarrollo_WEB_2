@@ -50,13 +50,13 @@ public class PedidoServiceImpl implements IPedidoService {
 
             List<Detalle_Pedido> detallePedidos = registroPedidoDTO.items().stream()
                     .map(dp-> {
-                        Catalogo catalogo = catalogoRepository.findById(dp.catalogoId())
+                        Catalogo catalogo = catalogoRepository.findById(dp.catalogo_Id())
                                 .orElseThrow(() -> new EntityNotFoundException("Catalogo no encontrado"));
 
                         Detalle_Pedido detallePedido = new Detalle_Pedido();
                         detallePedido.setCatalogo(catalogo);
                         detallePedido.setPrecio_Unitario(catalogo.getPrecio());
-                        detallePedido.setCantidad(dp.cantidad());
+                        detallePedido.setCantidad(dp.quantity());
                         detallePedido.setSub_Total(catalogo.getPrecio().multiply(BigDecimal.valueOf(detallePedido.getCantidad())));
 
                         return detallePedido;

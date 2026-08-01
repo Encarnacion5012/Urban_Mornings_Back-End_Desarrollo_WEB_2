@@ -69,12 +69,14 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     @Transactional
-    public void eliminarUsuario(UUID id_usuario) {
+    public Integer eliminarUsuario(UUID id_usuario) {
 
         Usuario usuarioExistente = usuarioRepository.findById(id_usuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con el ID: " + id_usuario));
 
-        usuarioRepository.eliminarUsuario(usuarioExistente.getIdUsuario());
+        return usuarioRepository.eliminarUsuario(usuarioExistente.getIdUsuario());
+
+
     }
 
     @Override

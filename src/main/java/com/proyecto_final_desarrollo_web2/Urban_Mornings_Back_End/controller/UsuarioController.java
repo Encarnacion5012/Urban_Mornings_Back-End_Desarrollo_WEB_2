@@ -23,6 +23,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -75,9 +76,13 @@ public class UsuarioController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<Void> eliminarUsuario(@PathVariable UUID id) {
+    public ResponseEntity<?> eliminarUsuario(@PathVariable UUID id) {
 
-        usuarioService.eliminarUsuario(id);
+        Integer filasAfectadas = usuarioService.eliminarUsuario(id);
+
+        if (filasAfectadas == 0) {
+            return ResponseEntity.badRequest().body(Map.of("message","Error al eliminar usuario, intente mas tarde"));
+        }
 
         return ResponseEntity.noContent().build();
     }

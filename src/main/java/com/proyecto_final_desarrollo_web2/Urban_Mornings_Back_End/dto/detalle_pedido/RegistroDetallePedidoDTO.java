@@ -5,10 +5,12 @@ import jakarta.validation.constraints.NotNull;
 
 public record RegistroDetallePedidoDTO(
         @NotNull 
-        Integer catalogoId,
+        Integer catalogo_Id,
 
         @NotNull 
         @Min(value = 1, message = "La cantidad debe ser al menos 1") 
-        Integer cantidad
+        Integer quantity
+
+        
 ) {
 }

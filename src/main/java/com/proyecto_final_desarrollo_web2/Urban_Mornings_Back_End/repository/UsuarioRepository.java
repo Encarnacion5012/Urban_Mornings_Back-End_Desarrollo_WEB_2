@@ -68,8 +68,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
             @Param("activo") boolean activo
     );
 
-    @Modifying
+
     @Transactional
     @Query(value = "EXEC usp_Borrado_Logico_Usuario :id_usuario", nativeQuery = true)
-    void eliminarUsuario(@Param("id_usuario") UUID id_usuario);
+    Integer eliminarUsuario(@Param("id_usuario") UUID id_usuario);
 }
