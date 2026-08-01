@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.VentasPorMesAnioResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
@@ -102,4 +103,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     @Query(value = "EXEC pesp_Validad_Retiro_Pedido :id_Pedido, :codigo_Retiro  ", nativeQuery = true)
     Integer actulizarEstadoARetiradoPedido(@Param("id_Pedido") UUID id_Pedido,
                                         @Param("codigo_Retiro") Long codigo_Retiro);
+
+
+    @Transactional
+    @Query(value = "Exec estsp_Estadistica_Numero_Ventas_Mes", nativeQuery = true)
+    List<VentasPorMesAnioResponseProjection> listarEstadisticasVentasPorMes();
 }
