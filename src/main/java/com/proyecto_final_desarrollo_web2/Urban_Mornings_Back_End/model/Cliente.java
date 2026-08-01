@@ -57,7 +57,6 @@ public class Cliente implements UserDetails, IAppUser {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Se agregó el prefijo ROLE_ para estandarizar con tu configuración de seguridad
         return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
     }
 

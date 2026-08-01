@@ -16,9 +16,6 @@ public interface IPedidoService {
     Pedido actualizarPedido(UUID id, RegistroPedidoDTO registroPedidoDTO);
 
     void eliminarPedido(UUID id);
-    public void actualizarEstado(UUID idPedido, String nuevoEstado);
-    public void validarRetiroPedido(UUID idPedido, String codigoIngresado);
-
 
     public List<PedidoResponseProjection> listarPedidos();
     public List<PedidoResponseViewProjection> listarPedidosParaViews();
