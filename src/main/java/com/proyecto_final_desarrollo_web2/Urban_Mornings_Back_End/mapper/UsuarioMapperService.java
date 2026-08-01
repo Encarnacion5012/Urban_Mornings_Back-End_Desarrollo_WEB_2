@@ -8,7 +8,7 @@ import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.List;
+
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 
@@ -19,7 +19,7 @@ public abstract class UsuarioMapperService {
     protected PasswordEncoder passwordEncoder;
 
     @Mapping(target = "idUsuario", ignore = true)
-    @Mapping(target = "activo", ignore = true)
+    @Mapping(target = "activo", constant = "true")
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "clave", expression = "java(passwordEncoder.encode(usuarioDTO.clave()))")
     public abstract Usuario registroDTOToEntity(RegistroUsuarioDTO usuarioDTO);

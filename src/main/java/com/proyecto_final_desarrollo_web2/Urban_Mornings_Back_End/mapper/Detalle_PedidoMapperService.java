@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface Detalle_PedidoMapperService {
 
-    @Mapping(target = "catalogo.catalogo_id", source = "catalogoId")
+    @Mapping(target = "catalogo.catalogoId", source = "catalogoId")
     @Mapping(target = "detalleId", ignore = true)
     @Mapping(target = "pedido", ignore = true)
     @Mapping(target = "cantidad", source = "dto.cantidad")
@@ -17,6 +17,6 @@ public interface Detalle_PedidoMapperService {
     @Mapping(target = "sub_Total", ignore = true)
     Detalle_Pedido registroDTOToEntity(RegistroDetallePedidoDTO dto);
 
-    @Mapping(target = "catalogo_id", source = "catalogo.catalogo_id")
+    @Mapping(target = "catalogo_id", source = "catalogo.catalogoId")
     ResponseDetallePedidoDTO entityToResponseDTO(Detalle_Pedido detalle);
 }
