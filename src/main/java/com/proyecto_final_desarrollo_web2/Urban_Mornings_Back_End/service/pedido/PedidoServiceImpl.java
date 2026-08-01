@@ -169,6 +169,7 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
+    @Transactional
     public void actulizarEstadoPedido(UUID idPedido ,ActualizarEstadoPedidoDTO nuevoEstadoPedidoDTO) {
         pedidoRepository.actualizarEstadoPedido(
                 idPedido,
@@ -176,31 +177,10 @@ public class PedidoServiceImpl implements IPedidoService {
         );
     }
 
-    // --- NUEVAS FUNCIONES AGREGADAS ---
-
     @Override
     @Transactional
-    public void actualizarEstado(UUID idPedido, String nuevoEstado) {
-        if (!pedidoRepository.existsById(idPedido)) {
-            throw new EntityNotFoundException("Pedido no encontrado con ID: " + idPedido);
-        }
-        pedidoRepository.actualizarEstadoPedido(idPedido, nuevoEstado);
-    }
-
-    @Override
-    @Transactional
-    public void validarRetiroPedido(UUID idPedido, String codigoIngresado) {
-        // 1. Buscamos el pedido
-        Pedido pedido = pedidoRepository.findById(idPedido)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido no encontrado"));
-
-        // 2. Validamos el código (convertimos el Long a String para poder compararlo con el DTO)
-        if (!String.valueOf(pedido.getCodigoRetiro()).equals(codigoIngresado)) {
-            throw new RuntimeException("El código de retiro es incorrecto");
-        }
-
-        // 3. Si el código coincide, actualizamos el estado a RETIRADO
-        pedidoRepository.actualizarEstadoPedido(idPedido, "RETIRADO");
+    public void actulizarEstatoPedido_Retirado(UUID id_pedido, Long codigo_Retiro){
+        pedidoRepository.actulizarEstadoARetiradoPedido(id_pedido,codigo_Retiro);
     }
 
 }

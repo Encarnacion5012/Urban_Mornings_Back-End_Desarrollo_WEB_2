@@ -23,5 +23,6 @@ public interface IPedidoService {
     public List<PedidoResponseProjection> listarPedidos();
     public List<PedidoResponseViewProjection> listarPedidosParaViews();
     public void actulizarEstadoPedido(UUID idPedido , ActualizarEstadoPedidoDTO nuevoEstadoPedidoDTO);
+    public void actulizarEstatoPedido_Retirado(UUID id_pedido, Long codigo_Retiro);
 
 }

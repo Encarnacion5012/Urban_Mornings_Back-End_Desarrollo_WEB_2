@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
+
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.*;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoMapperServiceImpl;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
@@ -24,42 +25,42 @@ public class PedidoController {
     private final PedidoMapperServiceImpl pedidoMapperService;
 
 
-    @PostMapping("/registrar")
-    ResponseEntity<PedidoResponseProjection> registrarPedido(@RequestBody @Valid RegistroPedidoDTO registroPedidoDTO, UriComponentsBuilder uriComponentsBuilder) {
-        PedidoResponseProjection pedido = pedidoService.registroPedido(registroPedidoDTO);
-        URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(pedido.getId()).toUri();
+@PostMapping("/registrar")
+ResponseEntity<PedidoResponseProjection> registrarPedido(@RequestBody @Valid RegistroPedidoDTO registroPedidoDTO, UriComponentsBuilder uriComponentsBuilder) {
+    PedidoResponseProjection pedido =  pedidoService.registroPedido(registroPedidoDTO);
+    URI uri = uriComponentsBuilder.path("/pedidos/{id}").buildAndExpand(pedido.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(pedido);
-    }
+    return ResponseEntity.created(uri).body(pedido);
+}
 
-    @GetMapping("/listar/{id}")
+@GetMapping("/listar/{id}")
     public ResponseEntity<List<PedidoResponseProjection>> listarPedidos(@PathVariable UUID id) {
-        List<PedidoResponseProjection> pedidos = pedidoService.listarPedidosPorcliente(id);
-        return ResponseEntity.ok().body(pedidos);
-    }
+    List<PedidoResponseProjection> pedidos = pedidoService.listarPedidosPorcliente(id);
+    return ResponseEntity.ok().body(pedidos);
+}
 
 
-    @GetMapping("/listar")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PERSONAL_COCINA')")
-    ResponseEntity<List<PedidoResponseProjection>> listarPedidos() {
-        List<PedidoResponseProjection> pedidos = pedidoService.listarPedidos();
+@GetMapping("/listar")
+@PreAuthorize("hasAnyRole('ADMIN', 'PERSONAL_COCINA')")
+ResponseEntity<List<PedidoResponseProjection>> listarPedidos() {
+    List<PedidoResponseProjection> pedidos = pedidoService.listarPedidos();
 
-        return ResponseEntity.ok(pedidos);
-    }
+    return ResponseEntity.ok(pedidos);
+}
 
-    @GetMapping("/listar/view")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PERSONAL_COCINA')")
-    ResponseEntity<List<PedidoResponseViewProjection>> listarPedidosViews() {
-        List<PedidoResponseViewProjection> pedidos = pedidoService.listarPedidosParaViews();
+@GetMapping("/listar/view")
+@PreAuthorize("hasAnyRole('ADMIN', 'PERSONAL_COCINA')")
+ResponseEntity<List<PedidoResponseViewProjection>> listarPedidosViews() {
+    List<PedidoResponseViewProjection> pedidos = pedidoService.listarPedidosParaViews();
 
-        return ResponseEntity.ok(pedidos);
-    }
+    return ResponseEntity.ok(pedidos);
+}
 
 
     @PutMapping("/actualizar/{id}/estado")
     public ResponseEntity<ResponsePedidoDTO> actualizarPedido(@PathVariable UUID id, @RequestBody ActualizarEstadoPedidoDTO nuevoEstadodto) {
 
-        pedidoService.actulizarEstadoPedido(id, nuevoEstadodto);
+    pedidoService.actulizarEstadoPedido(id, nuevoEstadodto);
 
         return ResponseEntity.noContent().build();
     }
@@ -72,14 +73,11 @@ public class PedidoController {
         return ResponseEntity.noContent().build();
     }
 
-
-
-
-    // Endpoint para validar el código del cliente y pasarlo a "RETIRADO"
     @PostMapping("/validar-retiro/{id}")
-    public ResponseEntity<String> validarRetiro(@PathVariable UUID id, @RequestBody @Valid ValidarRetiroDTO dto) {
-        pedidoService.validarRetiroPedido(id, dto.codigoRetiro());
-        return ResponseEntity.ok("Código válido. Pedido entregado/retirado exitosamente.");
-    }
+    public ResponseEntity<Void> validarRetiro(@PathVariable UUID id, @RequestBody @Valid ActulizarPedidoARetiradoDTO actulizarDto) {
+    pedidoService.actulizarEstatoPedido_Retirado(id, actulizarDto.codigoRetiro());
 
+    return ResponseEntity.noContent().build();
+    }
 }
+
