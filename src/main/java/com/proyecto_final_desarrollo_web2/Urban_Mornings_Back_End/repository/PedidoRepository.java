@@ -97,9 +97,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
             @Param("nuevoEstado")String nuevoEstado
             );
 
-    @Modifying
+
     @Transactional
     @Query(value = "EXEC pesp_Validad_Retiro_Pedido :id_Pedido, :codigo_Retiro  ", nativeQuery = true)
-    void actulizarEstadoARetiradoPedido(@Param("id_Pedido") UUID id_Pedido,
+    Integer actulizarEstadoARetiradoPedido(@Param("id_Pedido") UUID id_Pedido,
                                         @Param("codigo_Retiro") Long codigo_Retiro);
 }
