@@ -70,6 +70,7 @@ ResponseEntity<List<PedidoResponseViewProjection>> listarPedidosViews() {
 
         pedidoService.eliminarPedido(id);
 
+
         return ResponseEntity.noContent().build();
     }
 }
