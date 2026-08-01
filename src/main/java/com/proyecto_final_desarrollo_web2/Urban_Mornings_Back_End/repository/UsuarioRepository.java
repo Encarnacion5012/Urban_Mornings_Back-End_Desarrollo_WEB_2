@@ -70,6 +70,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
 
     @Modifying
     @Transactional
-    @Query(value = "DELETE FROM usuarios WHERE id_usuario = :id_usuario", nativeQuery = true)
+    @Query(value = "EXEC usp_Borrado_Logico_Usuario :id_usuario", nativeQuery = true)
     void eliminarUsuario(@Param("id_usuario") UUID id_usuario);
 }

@@ -23,8 +23,6 @@ import java.util.UUID;
 public class UsuarioServiceImpl implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioMapperService usuarioMapper;
-    private final PasswordEncoder passwordEncoder; // Se inyecta para encriptar claves
     private final UsuarioMapperService usuarioMapperService;
 
     @Transactional
