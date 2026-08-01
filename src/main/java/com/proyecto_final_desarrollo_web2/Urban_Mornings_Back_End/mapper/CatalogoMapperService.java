@@ -10,11 +10,11 @@ import org.mapstruct.Mapping;
 
 public interface CatalogoMapperService {
 
-    @Mapping(target = "catalogo_id", ignore = true)
+    @Mapping(target = "catalogoId", ignore = true)
     @Mapping(target = "activo", constant = "true")
     Catalogo resgistroDTOToEntity(RegistroCatalogoDTO catalogoDTO);
 
 
-    @Mapping(target = "catalogo_id", source = "catalogo_id")
+    @Mapping(target = "catalogo_id", source = "catalogoId")
     ResponseCatalogoDTO entityToDTO(Catalogo catalogo);
 }

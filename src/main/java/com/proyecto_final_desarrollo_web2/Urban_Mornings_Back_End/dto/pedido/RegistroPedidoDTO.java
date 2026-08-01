@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.detalle_pedido.RegistroDetallePedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pago.Metodo_Pago;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ public record RegistroPedidoDTO(
 
         @NotNull(message = "La hora de recogida no debe ser nula")
         //@FutureOrPresent(message = "la hora de recogida no puede ser en el pasado")
+        @JsonFormat(pattern = "HH:mm:ss")
         LocalTime pickupTime,
 
 

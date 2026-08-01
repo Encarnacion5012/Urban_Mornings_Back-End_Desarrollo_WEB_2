@@ -1,6 +1,8 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedido;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.ActualizarEstadoPedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.RegistroPedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.PedidoMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
@@ -155,6 +157,23 @@ public class PedidoServiceImpl implements IPedidoService {
         );
 
         return pedidoRepository.findById(id).orElse(null);
+    }
+    @Override
+    public List<PedidoResponseProjection> listarPedidos(){
+        return pedidoRepository.listarPedidos();
+    }
+
+    @Override
+    public List<PedidoResponseViewProjection> listarPedidosParaViews(){
+        return pedidoRepository.listarTodosView();
+    }
+
+    @Override
+    public void actulizarEstadoPedido(UUID idPedido ,ActualizarEstadoPedidoDTO nuevoEstadoPedidoDTO) {
+        pedidoRepository.actualizarEstadoPedido(
+                idPedido,
+                nuevoEstadoPedidoDTO.estado().name()
+        );
     }
 
 }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "catalogo_id")
+@EqualsAndHashCode(of = "catalogoId")
 
 
 @Entity
@@ -17,7 +17,8 @@ import java.math.BigDecimal;
 public class Catalogo {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer catalogo_id;
+  @Column(name = "catalogo_id")
+  private Integer catalogoId;
 
   private String nombre;
 

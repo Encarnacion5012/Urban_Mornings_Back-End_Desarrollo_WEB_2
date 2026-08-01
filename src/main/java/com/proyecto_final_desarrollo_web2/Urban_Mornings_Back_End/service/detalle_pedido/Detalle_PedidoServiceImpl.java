@@ -30,7 +30,7 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
         detallePedidoRepository.registrarDetallePedido(
                 detalle.getDetalleId(),
                 detalle.getPedido().getPedidoId(),
-                detalle.getCatalogo().getCatalogo_id(),
+                detalle.getCatalogo().getCatalogoId(),
                 detalle.getCantidad(),
                 detalle.getPrecio_Unitario(),
                 detalle.getSub_Total()
@@ -57,7 +57,7 @@ public class Detalle_PedidoServiceImpl implements IDetalle_PedidoService {
         detallePedidoRepository.actualizarDetallePedido(
                 detalleExistente.getDetalleId(),
                 datosNuevos.getPedido().getPedidoId(),
-                datosNuevos.getCatalogo().getCatalogo_id(),
+                datosNuevos.getCatalogo().getCatalogoId(),
                 datosNuevos.getCantidad(),
                 datosNuevos.getPrecio_Unitario(),
                 datosNuevos.getSub_Total()
