@@ -2,6 +2,7 @@ package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -54,6 +55,22 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
             """)
     List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente") UUID id_cliente);
 
+    @Query(value = """
+        SELECT DISTINCT pa FROM Pago pa
+        JOIN FETCH pa.pedido pe
+        LEFT JOIN FETCH pe.detallesPedido dp
+        LEFT JOIN FETCH dp.catalogo ca
+""")
+    List<PedidoResponseProjection> listarPedidos();
+
+    @Query("""
+    SELECT DISTINCT pa FROM Pago pa
+    JOIN FETCH pa.pedido pe
+    JOIN FETCH pe.cliente ce
+    LEFT JOIN FETCH pe.detallesPedido dp
+    LEFT JOIN FETCH dp.catalogo ca
+""")
+    List<PedidoResponseViewProjection> listarTodosView();
 
     @Modifying
     @Transactional

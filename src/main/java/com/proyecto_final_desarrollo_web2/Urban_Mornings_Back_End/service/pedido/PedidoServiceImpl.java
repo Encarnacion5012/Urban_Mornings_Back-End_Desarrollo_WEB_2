@@ -202,8 +202,5 @@ public class PedidoServiceImpl implements IPedidoService {
         // 3. Si el código coincide, actualizamos el estado a RETIRADO
         pedidoRepository.actualizarEstadoPedido(idPedido, "RETIRADO");
     }
-    @Override
-    public List<PedidoResponseProjection> listarTodosLosPedidos() {
-        return pedidoRepository.listarTodosLosPedidos();
-    }
+
 }

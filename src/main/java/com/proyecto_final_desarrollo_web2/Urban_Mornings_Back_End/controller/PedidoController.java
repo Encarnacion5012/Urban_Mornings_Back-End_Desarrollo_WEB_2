@@ -72,7 +72,7 @@ public class PedidoController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- NUEVOS ENDPOINTS ---
+
 
 
     // Endpoint para validar el código del cliente y pasarlo a "RETIRADO"

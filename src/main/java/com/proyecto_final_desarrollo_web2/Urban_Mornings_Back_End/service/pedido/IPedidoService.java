@@ -18,7 +18,6 @@ public interface IPedidoService {
     void eliminarPedido(UUID id);
     public void actualizarEstado(UUID idPedido, String nuevoEstado);
     public void validarRetiroPedido(UUID idPedido, String codigoIngresado);
-    public List<PedidoResponseProjection> listarTodosLosPedidos();
 
 
     public List<PedidoResponseProjection> listarPedidos();
