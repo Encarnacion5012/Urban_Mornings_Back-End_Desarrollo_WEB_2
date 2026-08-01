@@ -7,6 +7,8 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 
 
@@ -19,7 +21,7 @@ public abstract class UsuarioMapperService {
     protected PasswordEncoder passwordEncoder;
 
     @Mapping(target = "idUsuario", ignore = true)
-    @Mapping(target = "activo", constant = "true")
+    @Mapping(target = "activo", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "clave", expression = "java(passwordEncoder.encode(usuarioDTO.clave()))")
     public abstract Usuario registroDTOToEntity(RegistroUsuarioDTO usuarioDTO);

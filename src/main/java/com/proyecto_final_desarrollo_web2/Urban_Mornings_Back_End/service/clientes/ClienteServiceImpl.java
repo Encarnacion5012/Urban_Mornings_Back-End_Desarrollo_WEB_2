@@ -5,12 +5,14 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.R
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.exeption.exeptions.EmailAlreadyExistExeption;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente_Usuario_Roles;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,33 +26,38 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto){
-
+    public ResponseClienteProjection registroClientes(RegistroClienteDTO registroDto) {
 
         Cliente cliente = clienteMapper.registerDtoTOEntity(registroDto);
 
-        if(clienteRepository.existsByCorreo(cliente.getCorreo())){
-            throw new EmailAlreadyExistExeption("Este correo ya esta registrado");
+        if (clienteRepository.existsByCorreo(cliente.getCorreo())) {
+            throw new EmailAlreadyExistExeption("Este correo ya está registrado");
         }
 
         cliente.setClienteId(generarClienteId());
+        cliente.setClave(passwordEncoder.encode(cliente.getClave()));
+        cliente.setRol(Cliente_Usuario_Roles.CLIENTE);
+        cliente.setFecha_Registro(LocalDateTime.now());
 
-        return clienteRepository.registrarCLiente(
+        clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
                 cliente.getCedula(),
-                cliente.getNombre_Completo(),
+                cliente.getNombreCompleto(),
                 cliente.getCorreo(),
                 cliente.getTelefono(),
                 cliente.getClave(),
                 cliente.getRol().name(),
                 cliente.getImagen_url(),
-                cliente.getFecha_Registro()
-                );
+                cliente.getFecha_Registro());
+
+        // Buscamos el cliente guardado y lo devolvemos como proyección (ya no da error)
+        return clienteRepository.buscarProyeccionPorId(cliente.getClienteId());
     }
 
-
     @Override
+    @Transactional
     public List<ResponseClienteProjection> listarTodos() {
+        // Devuelve la lista directa desde el SP, mapeada a proyecciones
         return clienteRepository.listarClientes();
     }
 
@@ -62,20 +69,17 @@ public class ClienteServiceImpl implements IClientesService {
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
 
         Cliente datosNuevos = clienteMapper.registerDtoTOEntity(registroDto);
-
-        // También encriptamos si actualizan la clave
         String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
 
         clienteRepository.actualizarCliente(
                 clienteExistente.getClienteId(),
                 datosNuevos.getCedula(),
-                datosNuevos.getNombre_Completo(),
+                datosNuevos.getNombreCompleto(),
                 datosNuevos.getCorreo(),
                 datosNuevos.getTelefono(),
-                claveEncriptada, // Usamos la clave encriptada
-                "USER", // Mantenemos el rol
-                datosNuevos.getImagen_url()
-        );
+                claveEncriptada,
+                Cliente_Usuario_Roles.CLIENTE.name(),
+                datosNuevos.getImagen_url());
 
         return clienteRepository.findById(id).orElse(null);
     }
@@ -83,7 +87,6 @@ public class ClienteServiceImpl implements IClientesService {
     @Override
     @Transactional
     public void eliminarCliente(UUID id) {
-
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
 
@@ -91,14 +94,11 @@ public class ClienteServiceImpl implements IClientesService {
     }
 
     private UUID generarClienteId() {
-
         UUID id_generado = UUID.randomUUID();
-
-        if (clienteRepository.existsByClienteId(id_generado)) {
+        if (clienteRepository.existsById(id_generado)) {
             return generarClienteId();
         } else {
             return id_generado;
         }
-
     }
 }

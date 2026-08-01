@@ -1,7 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.catalogo.ResponseCatalogoProjection;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.catalogo.Catalogo;
 
 import jakarta.transaction.Transactional;

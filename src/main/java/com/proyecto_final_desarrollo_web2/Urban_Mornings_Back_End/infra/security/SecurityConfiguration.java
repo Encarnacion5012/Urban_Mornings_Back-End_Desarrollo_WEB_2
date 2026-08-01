@@ -33,24 +33,22 @@ public class SecurityConfiguration {
     private final JwtDecoder jwtDecoder;
 
     @Bean
-    public SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        // Permitimos el metodo post sin autenticacion en el login
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/clientes/todos").permitAll() // remember to change it is just
-                                                                                        // for a test
+                        .requestMatchers(HttpMethod.GET, "/clientes/todos").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/error").permitAll() // <--- ¡AÑADE ESTA LÍNEA AQUÍ!
                         .anyRequest().authenticated())
-
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder)
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                        .authenticationEntryPoint(customAuthenticacionEntryPoint()))
+                        .authenticationEntryPoint(customAuthenticationEntryPoint()))
                 .build();
     }
 
@@ -59,7 +57,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    // Método corregido para evitar el StackOverflow (bucle infinito)
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -69,7 +66,7 @@ public class SecurityConfiguration {
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
         jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
@@ -77,7 +74,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public AuthenticationEntryPoint customAuthenticacionEntryPoint() {
+    public AuthenticationEntryPoint customAuthenticationEntryPoint() {
         return (request, response, authException) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");

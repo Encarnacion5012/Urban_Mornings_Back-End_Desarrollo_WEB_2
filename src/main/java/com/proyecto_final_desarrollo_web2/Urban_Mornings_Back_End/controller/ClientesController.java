@@ -6,8 +6,6 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.R
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes.IClientesService;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
-import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
