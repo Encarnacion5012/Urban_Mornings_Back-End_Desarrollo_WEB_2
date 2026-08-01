@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -74,8 +75,12 @@ ResponseEntity<List<PedidoResponseViewProjection>> listarPedidosViews() {
     }
 
     @PostMapping("/validar-retiro/{id}")
-    public ResponseEntity<Void> validarRetiro(@PathVariable UUID id, @RequestBody @Valid ActulizarPedidoARetiradoDTO actulizarDto) {
-    pedidoService.actulizarEstatoPedido_Retirado(id, actulizarDto.codigoRetiro());
+    public ResponseEntity<?> validarRetiro(@PathVariable UUID id, @RequestBody @Valid ActulizarPedidoARetiradoDTO actulizarDto) {
+    Integer filasAfectadas = pedidoService.actulizarEstatoPedido_Retirado(id, actulizarDto.codigoRetiro());
+
+    if (filasAfectadas==0) {
+        return ResponseEntity.badRequest().body(Map.of("message", "EL codigo de retiro es incorrecto"));
+    }
 
     return ResponseEntity.noContent().build();
     }
