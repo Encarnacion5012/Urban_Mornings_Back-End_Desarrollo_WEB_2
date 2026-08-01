@@ -72,4 +72,11 @@ ResponseEntity<List<PedidoResponseViewProjection>> listarPedidosViews() {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/validar-retiro/{id}")
+    public ResponseEntity<Void> validarRetiro(@PathVariable UUID id, @RequestBody @Valid ActulizarPedidoARetiradoDTO actulizarDto) {
+    pedidoService.actulizarEstatoPedido_Retirado(id, actulizarDto.codigoRetiro());
+
+    return ResponseEntity.noContent().build();
+    }
 }

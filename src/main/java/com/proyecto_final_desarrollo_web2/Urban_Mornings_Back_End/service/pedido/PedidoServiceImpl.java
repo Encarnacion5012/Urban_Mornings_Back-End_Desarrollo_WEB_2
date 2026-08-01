@@ -169,11 +169,18 @@ public class PedidoServiceImpl implements IPedidoService {
     }
 
     @Override
+    @Transactional
     public void actulizarEstadoPedido(UUID idPedido ,ActualizarEstadoPedidoDTO nuevoEstadoPedidoDTO) {
         pedidoRepository.actualizarEstadoPedido(
                 idPedido,
                 nuevoEstadoPedidoDTO.estado().name()
         );
+    }
+
+    @Override
+    @Transactional
+    public void actulizarEstatoPedido_Retirado(UUID id_pedido, Long codigo_Retiro){
+        pedidoRepository.actulizarEstadoARetiradoPedido(id_pedido,codigo_Retiro);
     }
 
 }
