@@ -24,37 +24,38 @@ public class CatalogoController {
 
     @PostMapping("/registrar")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ResponseCatalogoProjection> registrarCatalogo(@RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
+    public ResponseEntity<ResponseCatalogoProjection> registrarCatalogo(
+            @RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
         ResponseCatalogoProjection catalogo = catalogoService.registroCatalgo(catalogoDTO);
 
         return ResponseEntity.ok().body(catalogo);
 
     }
 
-
-    @GetMapping("/todos")
-    public ResponseEntity<List<ResponseCatalogoProjection>> listarCatalogos(){
+    @GetMapping("/listar")
+    public ResponseEntity<List<ResponseCatalogoProjection>> listarCatalogos() {
         List<ResponseCatalogoProjection> catalogos = catalogoService.listarTodos();
 
         return ResponseEntity.ok().body(catalogos);
     }
+
     @PutMapping("/actualizar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseCatalogoDTO> actualizarCatalogo(
-            @PathVariable Integer id, 
+            @PathVariable Integer id,
             @RequestBody @Valid RegistroCatalogoDTO catalogoDTO) {
-        
+
         Catalogo catalogoActualizado = catalogoService.actualizarCatalogo(id, catalogoDTO);
-        
+
         return ResponseEntity.ok().body(catalogoMapperService.entityToDTO(catalogoActualizado));
     }
 
     @DeleteMapping("/eliminar/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> eliminarCatalogo(@PathVariable Integer id) {
-        
+
         catalogoService.eliminarCatalogo(id);
-        
+
         return ResponseEntity.noContent().build(); // Devuelve un código 204 (Sin contenido)
     }
 }
