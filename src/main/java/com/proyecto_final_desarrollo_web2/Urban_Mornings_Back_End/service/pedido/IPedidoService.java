@@ -1,4 +1,5 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.pedido;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.Top5MasVendidoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.ActualizarEstadoPedidoDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
@@ -21,5 +22,6 @@ public interface IPedidoService {
     public List<PedidoResponseViewProjection> listarPedidosParaViews();
     public void actulizarEstadoPedido(UUID idPedido , ActualizarEstadoPedidoDTO nuevoEstadoPedidoDTO);
     public Integer actulizarEstatoPedido_Retirado(UUID id_pedido, Long codigo_Retiro);
+
 
 }

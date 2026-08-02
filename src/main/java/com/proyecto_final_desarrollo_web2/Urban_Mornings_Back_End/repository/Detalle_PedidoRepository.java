@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.Top5MasVendidoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Detalle_Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -46,4 +47,9 @@ public interface Detalle_PedidoRepository extends JpaRepository<Detalle_Pedido, 
     void eliminarDetallePedido(@Param("detalle_Id") UUID detalle_Id);
 
     boolean existsByDetalleId(UUID detalle_Id);
+
+    @Transactional
+    @Query(value = "EXEC R__estsp_Top5Productos", nativeQuery = true)
+    List<Top5MasVendidoProjection> top5MasVendido();
+
 }
