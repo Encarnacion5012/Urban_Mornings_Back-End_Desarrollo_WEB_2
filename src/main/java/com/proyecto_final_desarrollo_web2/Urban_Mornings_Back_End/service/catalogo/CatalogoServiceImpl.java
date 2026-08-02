@@ -22,19 +22,19 @@ public class CatalogoServiceImpl implements ICatalogoService {
     public ResponseCatalogoProjection registroCatalgo(RegistroCatalogoDTO catalogoDTO) {
         Catalogo catalogo = catalogoMapperService.resgistroDTOToEntity(catalogoDTO);
 
-        return  catalogoRepository.registrarCatalogo(
+        return catalogoRepository.registrarCatalogo(
                 catalogo.getNombre(),
                 catalogo.getDescripcion(),
                 catalogo.getPrecio(),
                 catalogo.getTipo().name(),
-                catalogo.getCategoria_Desayuno().name(),
+                // ¡AQUÍ ESTÁ LA SOLUCIÓN! Verifica si es nulo antes de llamar a .name()
+                catalogo.getCategoria_Desayuno() != null ? catalogo.getCategoria_Desayuno().name() : null,
                 catalogo.getImagen_Url(),
-                catalogo.getActivo()
-        );
+                catalogo.getActivo());
     }
 
     @Override
-    public List<ResponseCatalogoProjection>listarTodos(){
+    public List<ResponseCatalogoProjection> listarTodos() {
         return catalogoRepository.listarTodos();
     }
 
