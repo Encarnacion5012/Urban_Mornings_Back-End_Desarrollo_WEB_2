@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.Top5MasVendidoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.VentasPorMesAnioResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.estadisticas.IEstadisticasService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,12 @@ public class EstadisticasController {
         List<VentasPorMesAnioResponseProjection> ventasPorMes = estadisticasService.listarEstadisticasVentasPorMes();
 
         return ResponseEntity.ok(ventasPorMes);
+    }
+
+    @GetMapping("/top5Vendidos")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Top5MasVendidoProjection>> top5Vendido() {
+        List<Top5MasVendidoProjection> top5catalogos = estadisticasService.top5MasVendido();
+        return ResponseEntity.ok(top5catalogos);
     }
 }

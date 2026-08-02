@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.Top5MasVendidoProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.VentasPorMesAnioResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
@@ -53,7 +54,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     
     where pe.cliente.clienteId =:id_cliente
 """)
-    List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente")  UUID id_cliente);
+    List<PedidoResponseProjection> listarPedidosPorcliente(@Param("id_cliente") UUID id_cliente);
 
     @Query(value = """
         SELECT DISTINCT pa FROM Pago pa
@@ -95,17 +96,18 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     @Query(value = "EXEC pesp_Actualizar_Estado_Pedidos :id_Usuario, :nuevoEstado", nativeQuery = true)
     void actualizarEstadoPedido(
             @Param("id_Usuario") UUID id_usuario,
-            @Param("nuevoEstado")String nuevoEstado
-            );
+            @Param("nuevoEstado") String nuevoEstado
+    );
 
 
     @Transactional
     @Query(value = "EXEC pesp_Validad_Retiro_Pedido :id_Pedido, :codigo_Retiro  ", nativeQuery = true)
     Integer actulizarEstadoARetiradoPedido(@Param("id_Pedido") UUID id_Pedido,
-                                        @Param("codigo_Retiro") Long codigo_Retiro);
+                                           @Param("codigo_Retiro") Long codigo_Retiro);
 
 
     @Transactional
     @Query(value = "Exec estsp_Estadistica_Numero_Ventas_Mes", nativeQuery = true)
     List<VentasPorMesAnioResponseProjection> listarEstadisticasVentasPorMes();
+
 }
