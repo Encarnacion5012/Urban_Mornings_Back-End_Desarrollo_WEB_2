@@ -8,4 +8,5 @@ Integer getVentas();
 BigDecimal getIngresos();
 Integer getId();
 String getNombre();
+String getImagen_Url();
 }

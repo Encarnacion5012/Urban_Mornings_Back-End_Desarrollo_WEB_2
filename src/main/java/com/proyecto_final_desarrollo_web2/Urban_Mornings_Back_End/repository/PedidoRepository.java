@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.estadisticas.VentasPorMesAnioResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.pedido.PedidoResponseViewProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.pedido.Pedido;
@@ -68,6 +69,8 @@ public interface PedidoRepository extends JpaRepository<Pedido, UUID> {
     JOIN FETCH pe.cliente ce
     LEFT JOIN FETCH pe.detallesPedido dp
     LEFT JOIN FETCH dp.catalogo ca
+    
+    ORDER BY pe.fecha_Hora_Retiro
 """)
     List<PedidoResponseViewProjection> listarTodosView();
 
