@@ -1,11 +1,13 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.controller;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ActuializarClientesDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.ClienteMapperService;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes.IClientesService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,10 +43,10 @@ public class ClientesController {
                 .body(clienteCreado);
     }
 
-    @PutMapping("/actualizar/{id}")
-    public ResponseEntity<ResponseClienteDTO> actualizarCliente(@PathVariable UUID id, @RequestBody RegistroClienteDTO registroDto) {
+    @PutMapping("/actualizar/profile/{id}")
+    public ResponseEntity<ResponseClienteDTO> actualizarCliente(@PathVariable UUID id, @RequestBody @Valid ActuializarClientesDTO actualizacionDto) {
 
-        Cliente clienteActualizado = clientesService.actualizarCliente(id, registroDto);
+        Cliente clienteActualizado = clientesService.actualizarCliente(id, actualizacionDto);
 
         return ResponseEntity.ok(clienteMapperService.entityToResponseDto(clienteActualizado));
     }

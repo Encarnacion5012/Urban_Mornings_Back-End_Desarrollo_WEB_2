@@ -1,5 +1,6 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.clientes;
 
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ActuializarClientesDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.RegistroClienteDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.clientes.ResponseClienteProjection;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.exeption.exeptions.EmailAlreadyExistExeption;
@@ -35,9 +36,7 @@ public class ClienteServiceImpl implements IClientesService {
         }
 
         cliente.setClienteId(generarClienteId());
-        cliente.setClave(passwordEncoder.encode(cliente.getClave()));
-        cliente.setRol(Cliente_Usuario_Roles.CLIENTE);
-        cliente.setFecha_Registro(LocalDateTime.now());
+
 
         clienteRepository.registrarCLiente(
                 cliente.getClienteId(),
@@ -63,25 +62,16 @@ public class ClienteServiceImpl implements IClientesService {
 
     @Override
     @Transactional
-    public Cliente actualizarCliente(UUID id, RegistroClienteDTO registroDto) {
+    public Cliente actualizarCliente(UUID id, ActuializarClientesDTO actualizacionDto) {
 
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con el ID: " + id));
 
-        Cliente datosNuevos = clienteMapper.registerDtoTOEntity(registroDto);
-        String claveEncriptada = passwordEncoder.encode(datosNuevos.getClave());
+         clienteMapper.actualizarClientes(actualizacionDto, clienteExistente);
 
-        clienteRepository.actualizarCliente(
-                clienteExistente.getClienteId(),
-                datosNuevos.getCedula(),
-                datosNuevos.getNombreCompleto(),
-                datosNuevos.getCorreo(),
-                datosNuevos.getTelefono(),
-                claveEncriptada,
-                Cliente_Usuario_Roles.CLIENTE.name(),
-                datosNuevos.getImagen_url());
 
-        return clienteRepository.findById(id).orElse(null);
+
+        return clienteExistente;
     }
 
     @Override
