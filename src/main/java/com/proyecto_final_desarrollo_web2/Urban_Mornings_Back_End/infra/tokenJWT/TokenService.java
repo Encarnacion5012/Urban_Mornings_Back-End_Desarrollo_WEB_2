@@ -42,6 +42,9 @@ public class TokenService {
                 .claim("imagenUrl", userDates.getUrl_Imagen() != null ? userDates.getUrl_Imagen() : "")
                 // Validación para evitar que explote si el nombre es null
                 .claim("username", userDates.getNombre_Completo() != null ? userDates.getNombre_Completo() : "")
+                .claim("cedula", userDates.getCedula() != null ? userDates.getCedula() : "")
+                .claim("telefono", userDates.getTelefono() != null ? userDates.getTelefono() : "")
+
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();

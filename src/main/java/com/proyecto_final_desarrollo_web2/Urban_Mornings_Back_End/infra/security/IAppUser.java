@@ -8,5 +8,7 @@ public interface IAppUser extends UserDetails {
     UUID getUserId();
     String getNombre_Completo();
     String getUrl_Imagen();
+    String getTelefono();
+    String getCedula();
 
 }
