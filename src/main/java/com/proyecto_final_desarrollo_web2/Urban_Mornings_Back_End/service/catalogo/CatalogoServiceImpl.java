@@ -63,6 +63,6 @@ public class CatalogoServiceImpl implements ICatalogoService {
         Catalogo catalogoExistente = catalogoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Catálogo no encontrado con el ID: " + id));
 
-        catalogoRepository.delete(catalogoExistente);
+        catalogoExistente.setActivo(false);
     }
 }
