@@ -27,7 +27,7 @@ public record RegistroClienteDTO(
 
      String imagen_url,
 
-     @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$", message = "El teléfono debe tener un formato internacional válido (ej: +18095551234)")
+     @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$", message = "El teléfono debe tener un formato internacional válido (ej: 809-555-1234)")
      String telefono
 
 
