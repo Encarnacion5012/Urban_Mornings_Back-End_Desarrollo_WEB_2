@@ -1,6 +1,7 @@
 package com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.email;
 
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.emails.SolicitudRecuperacionDTO;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.dto.emails.SolicitudVerificacionEmailDTO;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.infra.security.IAppUser;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Usuario;
@@ -37,10 +38,13 @@ public class EmailServiceImpl implements IEmailService {
     public record DatosValidacion(String email, Long codigo){}
     public record DatosNuevaCLave(String email, Long codigo, String claveNueva){}
 
+
     private final Map<String, DatosCodigo> mapaDeCodigos = new ConcurrentHashMap<>();
 
+
+
     @Override
-    public void sendEmail(SolicitudRecuperacionDTO solicitudRecuperacionDTO) throws MessagingException {
+    public void sendEmailRecuperacion(SolicitudRecuperacionDTO solicitudRecuperacionDTO) throws MessagingException {
 
         IAppUser userDetails = (IAppUser) usuarioRepository.findByCorreo(solicitudRecuperacionDTO.correo())
                 .orElseGet(() -> clienteRepository.findByCorreo(solicitudRecuperacionDTO.correo())
@@ -111,6 +115,42 @@ public class EmailServiceImpl implements IEmailService {
         } else if (usuario instanceof Cliente c) {
             c.setClave(passwordEncoder.encode(datosNuevaCLave.claveNueva()));
         }
+    }
+
+
+    @Override
+    public void sendEmailVerificacion(SolicitudVerificacionEmailDTO solicitudVerificacionEmailDTO) {
+        try {
+
+            Long codigoVerificacion = generarCodigorRecuperacion();
+
+            mapaDeCodigos.put(solicitudVerificacionEmailDTO.email(), new  DatosCodigo(codigoVerificacion, LocalDateTime.now().plusMinutes(15)));
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(solicitudVerificacionEmailDTO.email());
+            helper.setSubject("Código de recuperación de contraseña");
+
+            Context context = new Context();
+            context.setVariable("codigoVerificacion", codigoVerificacion);
+
+            String contentHtml = templateEngine.process("verificacionEmail", context);
+
+            helper.setText(contentHtml, true);
+
+            javaMailSender.send(message);
+
+        }catch (Exception e){
+            throw new RuntimeException("Error al enviar el mensaje: " + e.getMessage(), e);
+        }
+    }
+
+
+    @Override
+    public boolean verificarEmail(DatosValidacion datosValidacion){
+        return validarYConsumirCodigo(datosValidacion);
+
+
     }
 
     private Long generarCodigorRecuperacion() {

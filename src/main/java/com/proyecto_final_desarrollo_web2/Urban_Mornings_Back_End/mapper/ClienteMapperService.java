@@ -20,6 +20,7 @@ public abstract class ClienteMapperService {
     @Mapping(target = "fecha_Registro", expression = "java(java.time.LocalDateTime.now())")
     @Mapping(target = "clave", expression = ("java(passwordEncoder.encode(registroDto.clave()))"))
     @Mapping(target = "nombreCompleto", source = "nombre_Completo")
+
     public abstract Cliente registerDtoTOEntity(RegistroClienteDTO registroDto);
 
     @Mapping(target = "telefono", source = "cliente.telefono")
