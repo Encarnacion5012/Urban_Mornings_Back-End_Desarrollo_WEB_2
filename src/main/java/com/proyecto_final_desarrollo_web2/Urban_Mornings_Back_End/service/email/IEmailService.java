@@ -11,4 +11,5 @@ public interface IEmailService {
     public boolean validarYConsumirCodigo(EmailServiceImpl.DatosValidacion datosValidacion);
     public boolean verificarEmail(EmailServiceImpl.DatosValidacion datosValidacion);
     public void sendEmailVerificacion(SolicitudVerificacionEmailDTO solicitudVerificacionEmailDTO);
+    public void sendMensajeBienvenida(String nombreCLiente, String correo);
 }

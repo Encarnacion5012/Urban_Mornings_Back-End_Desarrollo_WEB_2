@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Bienvenido a Urban Mornings!</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrapper {
+            width: 100%;
+            background-color: #f9fafb;
+            padding: 40px 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 4px solid #d97706; /* Ámbar 600 */
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: -0.5px;
+        }
+        .header h1 span {
+            color: #d97706; /* Ámbar 600 */
+        }
+        .hero-banner {
+            background-color: #fef3c7; /* Ámbar 50 */
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .hero-banner h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #b45309; /* Ámbar 700 */
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4b5563;
+            margin-bottom: 20px;
+        }
+        .features-list {
+            background-color: #f3f4f6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            list-style: none;
+        }
+        .features-list li {
+            margin-bottom: 12px;
+            color: #374151;
+            font-size: 15px;
+        }
+        .features-list li:last-child {
+            margin-bottom: 0;
+        }
+        .cta-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #d97706; /* Ámbar 600 */
+            color: #ffffff !important;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(217, 119, 6, 0.25);
+        }
+        .footer {
+            background-color: #f3f4f6;
+            text-align: center;
+            padding: 24px 30px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+        <!-- Encabezado con el Logo -->
+        <div class="header">
+            <h1>Urban<span>Mornings</span></h1>
+        </div>
+
+        <!-- Banner de Bienvenida -->
+        <div class="hero-banner">
+            <h2>¡Nos alegra tenerte aquí! 🎉</h2>
+        </div>
+
+        <!-- Cuerpo del Correo -->
+        <div class="content">
+            <!-- Saludo personalizado con Thymeleaf -->
+            <p style="font-size: 18px; font-weight: bold; color: #111827;">
+                ¡Hola, <span th:text="${nombre}">Usuario</span>!
+            </p>
+
+            <p>
+                Tu cuenta ha sido creada exitosamente. Te damos la bienvenida a <strong>Urban Mornings</strong>, el lugar donde cada desayuno se convierte en un momento especial.
+            </p>
+
+            <p>
+                A partir de ahora, podrás acceder a un montón de beneficios increíbles:
+            </p>
+
+            <ul class="features-list">
+                <li>🥐 <strong>Catálogo exclusivo:</strong> Descubre desayunos sorpresa diseñados para cualquier ocasión.</li>
+                <li>🏪 <strong>Recogidas programadas:</strong> Elige el día y la hora exacta (de lunes a sábado) para retirar tu pedido recién hecho en nuestro local.</li>
+                <li>🎁 <strong>Historial de pedidos:</strong> Revisa el estado de todos tus pedidos fácilmente.</li>
+            </ul>
+
+            <p>
+                ¿Listo para alegrarle el día a alguien o darte un gusto? Visita nuestra plataforma y descubre todo lo que hemos preparado para ti.
+            </p>
+
+            <!-- Botón de acción -->
+            <div class="cta-container">
+                <a href="https://urbanmornings.com" class="cta-button">Ver el Catálogo</a>
+            </div>
+
+            <p style="margin-top: 30px;">
+                Si tienes alguna pregunta o necesitas ayuda con tu primer pedido, no dudes en responder a este correo.
+            </p>
+
+            <p>
+                Con cariño,<br>
+                <strong>El equipo de Urban Mornings</strong>
+            </p>
+        </div>
+
+        <!-- Pie de página -->
+        <div class="footer">
+            <p>© <span th:text="${#dates.year(#dates.createNow())}">2026</span> Urban Mornings. Todos los derechos reservados.</p>
+            <p>Has recibido este correo porque te registraste en nuestra plataforma.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

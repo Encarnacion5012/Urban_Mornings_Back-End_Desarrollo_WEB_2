@@ -8,6 +8,7 @@ import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.mapper.Cliente
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.model.Cliente_Usuario_Roles;
 import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.repository.ClienteRepository;
+import com.proyecto_final_desarrollo_web2.Urban_Mornings_Back_End.service.email.IEmailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +24,7 @@ public class ClienteServiceImpl implements IClientesService {
 
     private final ClienteRepository clienteRepository;
     private final ClienteMapperService clienteMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final IEmailService emailService;
 
     @Override
     @Transactional
@@ -48,6 +49,8 @@ public class ClienteServiceImpl implements IClientesService {
                 cliente.getRol().name(),
                 cliente.getImagen_url(),
                 cliente.getFecha_Registro());
+
+        emailService.sendMensajeBienvenida(cliente.getNombreCompleto(), cliente.getCorreo());
 
         // Buscamos el cliente guardado y lo devolvemos como proyección (ya no da error)
         return clienteRepository.buscarProyeccionPorId(cliente.getClienteId());

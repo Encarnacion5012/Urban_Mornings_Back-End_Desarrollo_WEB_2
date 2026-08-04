@@ -122,6 +122,10 @@ public class EmailServiceImpl implements IEmailService {
     public void sendEmailVerificacion(SolicitudVerificacionEmailDTO solicitudVerificacionEmailDTO) {
         try {
 
+            if (clienteRepository.existsByCorreo(solicitudVerificacionEmailDTO.email())){
+                throw new RuntimeException("El cliente existe en el sistema");
+            }
+
             Long codigoVerificacion = generarCodigorRecuperacion();
 
             mapaDeCodigos.put(solicitudVerificacionEmailDTO.email(), new  DatosCodigo(codigoVerificacion, LocalDateTime.now().plusMinutes(15)));
@@ -150,6 +154,35 @@ public class EmailServiceImpl implements IEmailService {
     public boolean verificarEmail(DatosValidacion datosValidacion){
         return validarYConsumirCodigo(datosValidacion);
 
+
+    }
+
+
+    @Override
+    public void sendMensajeBienvenida(String nombreCLiente, String correo) {
+        try {
+
+            Long codigoVerificacion = generarCodigorRecuperacion();
+
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(correo);
+            helper.setSubject("Código de recuperación de contraseña");
+
+            Context context = new Context();
+            context.setVariable("nombre", nombreCLiente);
+
+            String contentHtml = templateEngine.process("registroEmail", context);
+
+            helper.setText(contentHtml, true);
+
+            javaMailSender.send(message);
+
+        }catch (Exception e){
+            throw new RuntimeException("Error al enviar el mensaje: " + e.getMessage(), e);
+        }
 
     }
 
