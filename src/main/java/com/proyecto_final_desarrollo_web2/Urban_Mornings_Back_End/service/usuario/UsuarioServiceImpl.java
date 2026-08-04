@@ -47,8 +47,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     }
 
-    public List<ResponseUsuarioProjection> listarUsuarios() {
-        return usuarioRepository.listarUsuarios();
+    public List<ResponseUsuarioProjection> listarUsuarios(UUID idUsuarioActual) {
+        return usuarioRepository.listarUsuarios(idUsuarioActual);
 
 
     }

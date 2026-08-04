@@ -47,8 +47,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, UUID> {
     );
 
 
-    @Query(value = "EXEC usp_ListarUsuarios", nativeQuery = true)
-    List<ResponseUsuarioProjection>listarUsuarios();
+    @Query(value = "EXEC usp_ListarUsuarios :idUsuarioACtual", nativeQuery = true)
+    List<ResponseUsuarioProjection>listarUsuarios(@Param("idUsuarioACtual") UUID idUsuarioACtual);
 
 
 

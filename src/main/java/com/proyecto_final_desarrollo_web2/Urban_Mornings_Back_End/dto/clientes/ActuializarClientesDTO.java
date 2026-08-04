@@ -28,7 +28,7 @@ public record ActuializarClientesDTO(
 
         Cliente_Usuario_Roles rol,
 
-        @Pattern(regexp = "^\\d{3}-\\d{3}-\\d{4}$", message = "El teléfono debe tener un formato internacional válido (ej: 809-555-1234)")
+        @Pattern(regexp = "^\\+1\\d{10}$", message = "El teléfono debe tener un formato internacional válido (ej: 809-555-1234)")
         String telefono
 ) {
     public ActuializarClientesDTO{

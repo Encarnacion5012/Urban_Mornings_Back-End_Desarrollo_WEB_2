@@ -1,4 +1,5 @@
 CREATE OR ALTER PROCEDURE  usp_ListarUsuarios
+    @usuarioActual UNIQUEIDENTIFIER
           AS
     BEGIN
     SET NOCOUNT ON
@@ -11,6 +12,6 @@ CREATE OR ALTER PROCEDURE  usp_ListarUsuarios
                usuarios.imagen_url,
                usuarios.rol
                FROM usuarios
-        WHERE usuarios.activo = 1;
+        WHERE usuarios.activo = 1 AND usuarios.id_usuario != @usuarioActual;
 
         END;

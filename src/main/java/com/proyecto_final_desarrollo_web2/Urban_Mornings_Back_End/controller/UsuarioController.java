@@ -35,10 +35,10 @@ public class UsuarioController {
     private final UsuarioMapperService usuarioMapperService;
 
 
-    @GetMapping("/listar")
+    @GetMapping("/listar/{idUsuarioACtual}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<ResponseUsuarioProjection>> listarTodosUsuarios() {
-        List<ResponseUsuarioProjection> usuarios = usuarioService.listarUsuarios();
+    public ResponseEntity<List<ResponseUsuarioProjection>> listarTodosUsuarios(@PathVariable UUID idUsuarioACtual) {
+        List<ResponseUsuarioProjection> usuarios = usuarioService.listarUsuarios(idUsuarioACtual );
         return ResponseEntity.ok().body(usuarios);
     }
 
