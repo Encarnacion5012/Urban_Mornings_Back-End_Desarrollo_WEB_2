@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Código de recuperación - Urban Mornings</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+        .wrapper {
+            width: 100%;
+            background-color: #f9fafb;
+            padding: 40px 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 4px solid #d97706; /* Ámbar 600 de Tailwind */
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: -0.5px;
+        }
+        .header h1 span {
+            color: #d97706; /* Ámbar 600 */
+        }
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .content h2 {
+            margin-top: 0;
+            color: #111827;
+            font-size: 22px;
+        }
+        .content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4b5563;
+            margin-bottom: 24px;
+        }
+        /* Contenedor del código de 6 dígitos */
+        .verification-code {
+            display: inline-block;
+            background-color: #fef3c7; /* Fondo Ámbar muy claro */
+            color: #b45309; /* Ámbar oscuro */
+            font-size: 36px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 2px dashed #f59e0b;
+            margin: 15px 0 25px 0;
+        }
+        .footer {
+            background-color: #f3f4f6;
+            text-align: center;
+            padding: 20px 30px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+        .alert-text {
+            color: #dc2626; /* Rojo de Tailwind */
+            font-weight: bold;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+        <!-- Encabezado con el Logo -->
+        <div class="header">
+            <h1>Urban<span>Mornings</span></h1>
+        </div>
+
+        <!-- Cuerpo del Correo -->
+        <div class="content">
+            <h2>Código de recuperación 🔐</h2>
+            <p>
+                ¡Hola, <strong th:text="${nombre}">Usuario</strong>!<br><br>
+                Hemos recibido una solicitud para restablecer tu contraseña. Ingresa el siguiente código de 6 dígitos en la aplicación para continuar:
+            </p>
+
+            <!-- Código dinámico de 6 dígitos Thymeleaf -->
+            <div class="verification-code" th:text="${codigoVerificacion}">
+                000000
+            </div>
+
+            <p class="alert-text">
+                Este código expirará en unos minutos por tu seguridad.
+            </p>
+
+            <p style="font-size: 14px; margin-top: 30px; color: #6b7280;">
+                No compartas este código con nadie. Nuestro equipo nunca te pedirá tu código de seguridad.
+            </p>
+        </div>
+
+        <!-- Pie de página -->
+        <div class="footer">
+            <p>© <span th:text="${#dates.year(#dates.createNow())}">2026</span> Urban Mornings. Todos los derechos reservados.</p>
+            <p>Si no fuiste tú quien solicitó este cambio, por favor ignora este correo. Tu cuenta sigue estando segura.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

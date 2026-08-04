@@ -1,0 +1,12 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: urbanmorningsunicda@gmail.com
+    password: dsid nhpc ayvc xaeh
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

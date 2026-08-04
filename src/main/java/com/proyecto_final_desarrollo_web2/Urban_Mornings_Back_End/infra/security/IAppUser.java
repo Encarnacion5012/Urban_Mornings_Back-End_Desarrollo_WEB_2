@@ -10,5 +10,6 @@ public interface IAppUser extends UserDetails {
     String getUrl_Imagen();
     String getTelefono();
     String getCedula();
+    String getCorreo();
 
 }

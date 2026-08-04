@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: classpath:email.yaml
   application:
     name: proyecto-final-desarrollo-web2
   mvc:
